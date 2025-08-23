@@ -115,19 +115,45 @@ class ChromakopiaFontGenerator {
             });
         }
         
-        // Background image upload
+        // Background image upload with validation
         if (this.bgUploadInput) {
             this.bgUploadInput.addEventListener('change', (e) => {
                 const file = e.target.files && e.target.files[0];
                 if (!file) return;
+                
+                // Validate file size (5MB max)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size must be less than 5MB');
+                    e.target.value = '';
+                    return;
+                }
+                
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select a valid image file');
+                    e.target.value = '';
+                    return;
+                }
+                
                 const reader = new FileReader();
                 reader.onload = (ev) => {
                     const img = new Image();
                     img.onload = () => {
                         this.uploadedImage = img;
+                        // Clear any active background option
+                        document.querySelectorAll('.bg-option').forEach(opt => opt.classList.remove('active'));
+                        this.currentBackground = 'image';
                         this.renderPreview();
                     };
+                    img.onerror = () => {
+                        alert('Failed to load image. Please try another file.');
+                        e.target.value = '';
+                    };
                     img.src = ev.target.result;
+                };
+                reader.onerror = () => {
+                    alert('Failed to read file. Please try again.');
+                    e.target.value = '';
                 };
                 reader.readAsDataURL(file);
             });
@@ -155,6 +181,13 @@ class ChromakopiaFontGenerator {
                 const bg = option.dataset.bg;
                 console.log('Background option clicked:', bg);
                 this.currentBackground = bg;
+                // Clear uploaded image when selecting other backgrounds
+                if (bg !== 'image') {
+                    this.uploadedImage = null;
+                    if (this.bgUploadInput) {
+                        this.bgUploadInput.value = '';
+                    }
+                }
                 this.updateActiveBackground(option);
                 this.renderPreview();
             });
@@ -184,10 +217,11 @@ class ChromakopiaFontGenerator {
         
         // Calculate dynamic text width using actual fonts
         const metrics = this.calculateThreeFontMetrics(this.currentText.toUpperCase(), fontsize1, fontsize2, fontsize3);
-        const horizontalPadding = Math.max(48, Math.round(fontsize2 * 0.8));
+        const horizontalPadding = Math.max(64, Math.round(fontsize2 * 1.0)); // More generous padding
+        const verticalPadding = Math.max(64, Math.round(fontsize1 * 0.5)); // Vertical padding for better centering
         const requiredWidth = metrics.totalWidth + horizontalPadding * 2;
-        const requiredHeight = fontsize1 + fontsize2 + fontsize3; // generous estimate
-        const squareSize = Math.max(requiredWidth, requiredHeight, 800);
+        const requiredHeight = Math.max(fontsize1, fontsize3) + verticalPadding * 2; // Better height calculation
+        const squareSize = Math.max(requiredWidth, requiredHeight, 800); // Minimum 800px for quality
         
         if (squareSize !== this.canvasWidth || squareSize !== this.canvasHeight) {
             this.canvasWidth = squareSize;
@@ -205,9 +239,15 @@ class ChromakopiaFontGenerator {
             this.drawTintOverlay(this.currentColor, 0.7);
         }
         
-        // Authentic spacing and positioning - ensure perfect horizontal centering
-        const y = Math.round(this.canvas.height / 2 + 32);
+        // Perfect centering - both horizontal and vertical
+        // Calculate precise vertical center based on font metrics
+        const textHeight = Math.max(fontsize1, fontsize3); // Height of the tallest characters
+        const verticalCenter = this.canvas.height / 2;
+        const y = Math.round(verticalCenter + (textHeight * 0.15)); // Slight offset for visual balance
+        
+        // Perfect horizontal centering
         const startX = Math.round((this.canvas.width - metrics.totalWidth) / 2);
+        
         this.drawThreeFontText(this.currentText.toUpperCase(), startX, y, fontsize1, fontsize2, fontsize3, metrics);
         
         this.updateResolutionLabel();
