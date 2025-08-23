@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Chromakopia Font Generator Online - Create Tyler The Creator Style Text</title>
+    <meta name="description" content="Create stunning Chromakopia-style text designs instantly. Free online font generator with real-time preview, custom colors & backgrounds. Perfect for social media!">
+    <meta name="keywords" content="chromakopia font generator, tyler the creator font, chromakopia text generator, free font generator online, chromakopia style text">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://chromakopia-font-generator.com/">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://chromakopia-font-generator.com/">
+    <meta property="og:title" content="Free Chromakopia Font Generator Online - Create Tyler Style Text">
+    <meta property="og:description" content="Create stunning Chromakopia-style text designs instantly. Free online font generator with real-time preview, custom colors & backgrounds.">
+    <meta property="og:image" content="https://chromakopia-font-generator.com/og-image.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://chromakopia-font-generator.com/">
+    <meta property="twitter:title" content="Free Chromakopia Font Generator Online - Create Tyler Style Text">
+    <meta property="twitter:description" content="Create stunning Chromakopia-style text designs instantly. Free online font generator with real-time preview.">
+    <meta property="twitter:image" content="https://chromakopia-font-generator.com/og-image.png">
+
+    <!-- JSON-LD Schema Markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Chromakopia Font Generator",
+        "description": "Free online font generator that creates Chromakopia-style text designs with real-time preview and custom backgrounds",
+        "url": "https://chromakopia-font-generator.com/",
+        "applicationCategory": "DesignApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": [
+            "Real-time text preview",
+            "Custom color picker",
+            "Background customization", 
+            "High-quality PNG export",
+            "Mobile responsive design",
+            "No registration required"
+        ]
+    }
+    </script>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.3.0/fontfaceobserver.standalone.js" defer></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header__content">
+                <h1 class="header__logo">CHROMAKOPIA<span class="header__logo-accent">Font Generator</span></h1>
+                <p class="header__subtitle">Create stunning Tyler-inspired text designs instantly</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section with Generator -->
+    <main class="main">
+        <div class="container">
+            <div class="hero">
+                <div class="hero__content">
+                    <h2 class="hero__title">Transform Your Text into <span class="text-gradient">Chromakopia Art</span></h2>
+                    <p class="hero__subtitle">Free online font generator with real-time preview, custom colors, and high-quality exports</p>
+                </div>
+                
+                <!-- Generator Interface -->
+                <div class="generator">
+                    <div class="generator__panels">
+                        <!-- Control Panel -->
+                        <div class="generator__controls">
+                            <div class="control-group">
+                                <label class="form-label" for="text-input">
+                                    <i data-lucide="edit-3"></i>
+                                    Your Text
+                                </label>
+                                <textarea id="text-input" class="form-control text-input" placeholder="Type your text here..." rows="3">CHROMAKOPIA</textarea>
+                            </div>
+
+
+
+                            <div class="control-group">
+                                <label class="form-label" for="text-color">
+                                    <i data-lucide="paintbrush-2"></i>
+                                    Text Color
+                                </label>
+                                <div class="color-picker-group">
+                                    <input type="color" id="text-color" class="color-picker" value="#4ba64b">
+                                    <div class="color-presets">
+                                        <button class="color-preset" data-color="#4ba64b" style="background: #4ba64b" title="Chromakopia Green"></button>
+                                        <button class="color-preset" data-color="#ffffff" style="background: #ffffff" title="White"></button>
+                                        <button class="color-preset" data-color="#0a0a0a" style="background: #0a0a0a" title="Black"></button>
+                                        <button class="color-preset" data-color="#8b7355" style="background: #8b7355" title="Sepia"></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <label class="form-label" for="font-size">
+                                    <i data-lucide="maximize-2"></i>
+                                    Font Size: <span id="size-value">72px</span>
+                                </label>
+                                <input type="range" id="font-size" class="slider" min="24" max="200" value="72">
+                            </div>
+
+                            <div class="control-group">
+                                <label class="form-label">
+                                    <i data-lucide="layers"></i>
+                                    Background
+                                </label>
+                                <div class="background-options">
+                                    <button class="bg-option active" data-bg="transparent" title="Transparent">
+                                        <div class="bg-preview transparent-bg"></div>
+                                        <span>Transparent</span>
+                                    </button>
+                                    <button class="bg-option" data-bg="#4ba64b" title="Chromakopia Green">
+                                        <div class="bg-preview" style="background: #4ba64b"></div>
+                                        <span>Green</span>
+                                    </button>
+                                    <button class="bg-option" data-bg="#0a0a0a" title="Dark">
+                                        <div class="bg-preview" style="background: #0a0a0a"></div>
+                                        <span>Dark</span>
+                                    </button>
+                                    <button class="bg-option" data-bg="linear-gradient(135deg, #4ba64b, #2d5016)" title="Gradient">
+                                        <div class="bg-preview" style="background: linear-gradient(135deg, #4ba64b, #2d5016)"></div>
+                                        <span>Gradient</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="control-group">
+                                <button id="download-btn" class="btn btn--primary btn--lg btn--full-width download-btn">
+                                    <i data-lucide="download-cloud"></i>
+                                    <span>Download High Quality PNG</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Preview Panel -->
+                        <div class="generator__preview">
+                            <div class="preview-container">
+                                <canvas id="preview-canvas" class="preview-canvas"></canvas>
+                                <div class="preview-overlay">
+                                    <div class="preview-info">
+                                        <span class="preview-resolution">1200×600</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="features__title">Why Choose Our Chromakopia Font Generator?</h2>
+            <div class="features__grid">
+                <div class="feature-card">
+                    <div class="feature-card__icon">⚡</div>
+                    <h3 class="feature-card__title">Real-Time Preview</h3>
+                    <p class="feature-card__description">See your design come to life instantly as you type</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card__icon">📸</div>
+                    <h3 class="feature-card__title">High Quality Export</h3>
+                    <p class="feature-card__description">Download in stunning 4K resolution for any use</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card__icon">🎨</div>
+                    <h3 class="feature-card__title">Custom Backgrounds</h3>
+                    <p class="feature-card__description">Upload your own images or choose from presets</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card__icon">📱</div>
+                    <h3 class="feature-card__title">Mobile Optimized</h3>
+                    <p class="feature-card__description">Perfect experience on any device, anywhere</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card__icon">💎</div>
+                    <h3 class="feature-card__title">Free Forever</h3>
+                    <p class="feature-card__description">No sign-ups, no limits, just pure creativity</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-card__icon">🌟</div>
+                    <h3 class="feature-card__title">Social Ready</h3>
+                    <p class="feature-card__description">Perfect for Instagram, Twitter, TikTok & more</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq">
+        <div class="container">
+            <h2 class="faq__title">Frequently Asked Questions</h2>
+            <div class="faq__list">
+                <div class="faq-item">
+                    <button class="faq-item__question" aria-expanded="false">
+                        <span>What is a Chromakopia Font Generator?</span>
+                        <span class="faq-item__icon">+</span>
+                    </button>
+                    <div class="faq-item__answer">
+                        <p>A Chromakopia Font Generator is a tool that creates text images in the distinctive style of Tyler, The Creator's album 'Chromakopia'. It features angular, bold typography with the signature green color scheme.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-item__question" aria-expanded="false">
+                        <span>Is the Chromakopia Font Generator free to use?</span>
+                        <span class="faq-item__icon">+</span>
+                    </button>
+                    <div class="faq-item__answer">
+                        <p>Yes! Our Chromakopia Font Generator is completely free to use. No registration required, no hidden fees, unlimited downloads.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-item__question" aria-expanded="false">
+                        <span>What image formats can I download?</span>
+                        <span class="faq-item__icon">+</span>
+                    </button>
+                    <div class="faq-item__answer">
+                        <p>You can download your creations in high-quality PNG format with transparent or custom backgrounds, perfect for social media and design projects.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-item__question" aria-expanded="false">
+                        <span>Can I use the generated images commercially?</span>
+                        <span class="faq-item__icon">+</span>
+                    </button>
+                    <div class="faq-item__answer">
+                        <p>Yes, all generated designs are free for both personal and commercial use. Perfect for branding, social media, and marketing materials.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-item__question" aria-expanded="false">
+                        <span>Does it work on mobile devices?</span>
+                        <span class="faq-item__icon">+</span>
+                    </button>
+                    <div class="faq-item__answer">
+                        <p>Absolutely! Our generator is fully responsive and optimized for mobile devices, tablets, and desktops for the best experience anywhere.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-item__question" aria-expanded="false">
+                        <span>How do I create the perfect Chromakopia design?</span>
+                        <span class="faq-item__icon">+</span>
+                    </button>
+                    <div class="faq-item__answer">
+                        <p>Start with the signature green color (#4ba64b), use bold text, and experiment with dark backgrounds. The angular font style is key to the authentic Chromakopia aesthetic.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__content">
+                <p>&copy; 2025 Chromakopia Font Generator. Free to use forever.</p>
+                <p>Create stunning Tyler The Creator inspired text designs instantly.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- FAQ Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What is a Chromakopia Font Generator?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "A Chromakopia Font Generator is a tool that creates text images in the distinctive style of Tyler, The Creator's album 'Chromakopia'. It features angular, bold typography with the signature green color scheme."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is the Chromakopia Font Generator free to use?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes! Our Chromakopia Font Generator is completely free to use. No registration required, no hidden fees, unlimited downloads."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What image formats can I download?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "You can download your creations in high-quality PNG format with transparent or custom backgrounds, perfect for social media and design projects."
+                }
+            }
+        ]
+    }
+    </script>
+
+    <script src="app.js"></script>
+    <script>
+        // Initialize Lucide icons
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+</html>
