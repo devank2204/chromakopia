@@ -267,7 +267,7 @@ bgImageInput.addEventListener('change', (e) => {
 <meta property="og:type" content="website">
 <meta property="og:title" content="Free Chromakopia Font Generator Online">
 <meta property="og:description" content="Generate stunning Chromakopia-style text instantly">
-<meta property="og:image" content="https://chromakopia-font-generator.com/og-image.jpg">
+<meta property="og:image" content="https://chromakopia-font-generator.netlify.app//og-image.jpg">
 
 <!-- Twitter Cards -->
 <meta property="twitter:card" content="summary_large_image">

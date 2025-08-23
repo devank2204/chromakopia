@@ -237,7 +237,7 @@ chromakopia-font-generator/
   "@type": "SoftwareApplication",
   "name": "Chromakopia Font Generator",
   "description": "Free online tool to create Chromakopia-style text designs",
-  "url": "https://chromakopia-font-generator.com",
+  "url": "https://chromakopia-font-generator.netlify.app/",
   "applicationCategory": "DesignApplication",
   "operatingSystem": "Web Browser",
   "offers": {
