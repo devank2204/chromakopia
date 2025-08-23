@@ -7,21 +7,21 @@
     <meta name="description" content="Create stunning Chromakopia-style text designs instantly. Free online font generator with real-time preview, custom colors & backgrounds. Perfect for social media!">
     <meta name="keywords" content="chromakopia font generator, tyler the creator font, chromakopia text generator, free font generator online, chromakopia style text">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://chromakopia-font-generator.com/">
+    <link rel="canonical" href="https://chromakopia-font-generator.netlify.app/">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://chromakopia-font-generator.com/">
+    <meta property="og:url" content="https://chromakopia-font-generator.netlify.app/">
     <meta property="og:title" content="Free Chromakopia Font Generator Online - Create Tyler Style Text">
     <meta property="og:description" content="Create stunning Chromakopia-style text designs instantly. Free online font generator with real-time preview, custom colors & backgrounds.">
-    <meta property="og:image" content="https://chromakopia-font-generator.com/og-image.png">
+    <meta property="og:image" content="https://chromakopia-font-generator.netlify.app/og-image.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://chromakopia-font-generator.com/">
+    <meta property="twitter:url" content="https://chromakopia-font-generator.netlify.app/">
     <meta property="twitter:title" content="Free Chromakopia Font Generator Online - Create Tyler Style Text">
     <meta property="twitter:description" content="Create stunning Chromakopia-style text designs instantly. Free online font generator with real-time preview.">
-    <meta property="twitter:image" content="https://chromakopia-font-generator.com/og-image.png">
+    <meta property="twitter:image" content="https://chromakopia-font-generator.netlify.app/og-image.png">
 
     <!-- JSON-LD Schema Markup -->
     <script type="application/ld+json">
@@ -30,7 +30,7 @@
         "@type": "SoftwareApplication",
         "name": "Chromakopia Font Generator",
         "description": "Free online font generator that creates Chromakopia-style text designs with real-time preview and custom backgrounds",
-        "url": "https://chromakopia-font-generator.com/",
+        "url": "https://chromakopia-font-generator.netlify.app/",
         "applicationCategory": "DesignApplication",
         "operatingSystem": "Web Browser",
         "offers": {
@@ -94,12 +94,25 @@
                                     Text Color
                                 </label>
                                 <div class="color-picker-group">
-                                    <input type="color" id="text-color" class="color-picker" value="#4ba64b">
+                                    <div class="color-input-row">
+                                        <input type="color" id="text-color" class="color-picker" value="#4ba64b">
+                                        <button id="eyedropper-btn" class="eyedropper-btn" title="Pick color from screen">
+                                            <i data-lucide="pipette"></i>
+                                        </button>
+                                    </div>
                                     <div class="color-presets">
-                                        <button class="color-preset" data-color="#4ba64b" style="background: #4ba64b" title="Chromakopia Green"></button>
+                                        <button class="color-preset" data-color="#01823f" style="background: #01823f" title="Chromakopia Green"></button>
                                         <button class="color-preset" data-color="#ffffff" style="background: #ffffff" title="White"></button>
                                         <button class="color-preset" data-color="#0a0a0a" style="background: #0a0a0a" title="Black"></button>
                                         <button class="color-preset" data-color="#8b7355" style="background: #8b7355" title="Sepia"></button>
+                                        <button class="color-preset" data-color="#ff6b6b" style="background: #ff6b6b" title="Red"></button>
+                                        <button class="color-preset" data-color="#4ecdc4" style="background: #4ecdc4" title="Teal"></button>
+                                        <button class="color-preset" data-color="#45b7d1" style="background: #45b7d1" title="Blue"></button>
+                                        <button class="color-preset" data-color="#f9ca24" style="background: #f9ca24" title="Yellow"></button>
+                                    </div>
+                                    <div class="recent-colors">
+                                        <label class="recent-colors-label">Recent Colors:</label>
+                                        <div id="recent-colors-list" class="recent-colors-list"></div>
                                     </div>
                                 </div>
                             </div>
@@ -277,8 +290,37 @@
     <footer class="footer">
         <div class="container">
             <div class="footer__content">
-                <p>&copy; 2025 Chromakopia Font Generator. Free to use forever.</p>
-                <p>Create stunning Tyler The Creator inspired text designs instantly.</p>
+                <div class="footer__brand">
+                    <h3 class="footer__logo">CHROMAKOPIA</h3>
+                    <p class="footer__description">Create stunning Tyler The Creator inspired text designs instantly.</p>
+                </div>
+                
+                <div class="footer__links">
+                    <div class="footer__section">
+                        <h4 class="footer__section-title">Legal</h4>
+                        <ul class="footer__list">
+                            <li><a href="/terms" class="footer__link">Terms of Service</a></li>
+                            <li><a href="/privacy" class="footer__link">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer__section">
+                        <h4 class="footer__section-title">Resources</h4>
+                        <ul class="footer__list">
+                            <li><a href="#features" class="footer__link">Features</a></li>
+                            <li><a href="#faq" class="footer__link">FAQ</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer__bottom">
+                <p class="footer__copyright">
+                    © 2025 Chromakopia Font Generator. Free to use forever.
+                </p>
+                <p class="footer__note">
+                    No registration required • Privacy-focused • Browser-based generation
+                </p>
             </div>
         </div>
     </footer>

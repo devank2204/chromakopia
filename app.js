@@ -10,6 +10,8 @@ class ChromakopiaFontGenerator {
         this.downloadBtn = document.getElementById('download-btn');
         this.authenticGreenCheckbox = document.getElementById('use-authentic-green');
         this.bgUploadInput = document.getElementById('bg-upload');
+        this.eyedropperBtn = document.getElementById('eyedropper-btn');
+        this.recentColorsList = document.getElementById('recent-colors-list');
 
         
         // State
@@ -21,7 +23,8 @@ class ChromakopiaFontGenerator {
         this.canvasHeight = 1200;
         this.uploadedImage = null;
         this.fontsLoaded = false;
-        this.letterSpacing = 62; 
+        this.letterSpacing = 62;
+        this.recentColors = this.loadRecentColors(); 
         
         this.init();
     }
@@ -36,6 +39,9 @@ class ChromakopiaFontGenerator {
         this.colorPicker.value = this.currentColor;
         this.fontSizeSlider.value = this.currentFontSize;
         this.sizeValue.textContent = `${this.currentFontSize}px`;
+        
+        // Initialize recent colors display
+        this.updateRecentColorsDisplay();
         
         // Defer first render until fonts are loaded for authenticity
         this.loadFonts().then(() => {
@@ -81,6 +87,7 @@ class ChromakopiaFontGenerator {
         // Color picker events - FIXED with better event handling
         this.colorPicker.addEventListener('input', (e) => {
             this.currentColor = e.target.value;
+            this.addToRecentColors(this.currentColor);
             console.log('Color updated:', this.currentColor);
             this.renderPreview();
         });
@@ -159,6 +166,19 @@ class ChromakopiaFontGenerator {
             });
         }
         
+        // Eyedropper functionality
+        if (this.eyedropperBtn) {
+            this.eyedropperBtn.addEventListener('click', () => {
+                this.useEyedropper();
+            });
+            
+            // Check if EyeDropper API is supported
+            if (!('EyeDropper' in window)) {
+                this.eyedropperBtn.disabled = true;
+                this.eyedropperBtn.title = 'Eyedropper not supported in this browser';
+            }
+        }
+        
         // Color presets - FIXED
         document.querySelectorAll('.color-preset').forEach(preset => {
             preset.addEventListener('click', (e) => {
@@ -168,6 +188,7 @@ class ChromakopiaFontGenerator {
                 console.log('Color preset clicked:', color);
                 this.currentColor = color;
                 this.colorPicker.value = color;
+                this.addToRecentColors(color);
                 this.updateActiveColorPreset(preset);
                 this.renderPreview();
             });
@@ -379,7 +400,7 @@ class ChromakopiaFontGenerator {
                 const idx = (y * off.width + x) * 4 + 3;
                 if (img[idx] !== 0) {
                     right = Math.max(right, x);
-                    break;
+                break;
                 }
             }
         }
@@ -599,6 +620,96 @@ class ChromakopiaFontGenerator {
             clearTimeout(timeout);
             timeout = setTimeout(later, wait);
         };
+    }
+    
+    // Eyedropper functionality
+    async useEyedropper() {
+        if (!('EyeDropper' in window)) {
+            alert('Eyedropper is not supported in this browser. Try using Chrome, Edge, or another Chromium-based browser.');
+            return;
+        }
+        
+        try {
+            const eyeDropper = new EyeDropper();
+            const result = await eyeDropper.open();
+            
+            if (result && result.sRGBHex) {
+                this.currentColor = result.sRGBHex;
+                this.colorPicker.value = result.sRGBHex;
+                this.addToRecentColors(result.sRGBHex);
+                this.renderPreview();
+                console.log('Color picked:', result.sRGBHex);
+            }
+        } catch (error) {
+            if (error.name !== 'AbortError') {
+                console.error('Eyedropper error:', error);
+                alert('Failed to use eyedropper. Please try again.');
+            }
+        }
+    }
+    
+    // Recent colors management
+    loadRecentColors() {
+        try {
+            const stored = localStorage.getItem('chromakopia-recent-colors');
+            return stored ? JSON.parse(stored) : [];
+        } catch (error) {
+            console.error('Failed to load recent colors:', error);
+            return [];
+        }
+    }
+    
+    saveRecentColors() {
+        try {
+            localStorage.setItem('chromakopia-recent-colors', JSON.stringify(this.recentColors));
+        } catch (error) {
+            console.error('Failed to save recent colors:', error);
+        }
+    }
+    
+    addToRecentColors(color) {
+        if (!color || color === this.recentColors[0]) return;
+        
+        // Remove if already exists
+        const index = this.recentColors.indexOf(color);
+        if (index > -1) {
+            this.recentColors.splice(index, 1);
+        }
+        
+        // Add to beginning
+        this.recentColors.unshift(color);
+        
+        // Keep only last 8 colors
+        if (this.recentColors.length > 8) {
+            this.recentColors = this.recentColors.slice(0, 8);
+        }
+        
+        this.saveRecentColors();
+        this.updateRecentColorsDisplay();
+    }
+    
+    updateRecentColorsDisplay() {
+        if (!this.recentColorsList) return;
+        
+        this.recentColorsList.innerHTML = '';
+        
+        if (this.recentColors.length === 0) {
+            this.recentColorsList.innerHTML = '<span style="color: var(--color-text-secondary); font-size: var(--font-size-xs);">No recent colors</span>';
+            return;
+        }
+        
+        this.recentColors.forEach(color => {
+            const colorBtn = document.createElement('button');
+            colorBtn.className = 'recent-color';
+            colorBtn.style.backgroundColor = color;
+            colorBtn.title = color;
+            colorBtn.addEventListener('click', () => {
+                this.currentColor = color;
+                this.colorPicker.value = color;
+                this.renderPreview();
+            });
+            this.recentColorsList.appendChild(colorBtn);
+        });
     }
 }
 
