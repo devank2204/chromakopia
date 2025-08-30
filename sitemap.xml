@@ -6,7 +6,7 @@
 
     <!-- Homepage -->
     <url>
-        <loc>https://chromakopia-font-generator.netlify.app/</loc>
+        <loc>https://chromakopiafont.site/</loc>
         <lastmod>2025-01-27</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
@@ -14,7 +14,7 @@
 
     <!-- Terms of Service -->
     <url>
-        <loc>https://chromakopia-font-generator.netlify.app/terms</loc>
+        <loc>https://chromakopiafont.site/terms</loc>
         <lastmod>2025-01-27</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.3</priority>
@@ -22,7 +22,7 @@
 
     <!-- Privacy Policy -->
     <url>
-        <loc>https://chromakopia-font-generator.netlify.app/privacy</loc>
+        <loc>https://chromakopiafont.site/privacy</loc>
         <lastmod>2025-01-27</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.3</priority>

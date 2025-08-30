@@ -237,7 +237,7 @@ chromakopia-font-generator/
   "@type": "SoftwareApplication",
   "name": "Chromakopia Font Generator",
   "description": "Free online tool to create Chromakopia-style text designs",
-  "url": "https://chromakopia-font-generator.netlify.app/",
+  "url": "https://chromakopiafont.site/",
   "applicationCategory": "DesignApplication",
   "operatingSystem": "Web Browser",
   "offers": {
@@ -263,8 +263,6 @@ chromakopia-font-generator/
 - **AWS S3**: Scalable with CloudFront CDN
 
 ### Domain Strategy
-- **Primary**: chromakopia-font-generator.com
-- **Alternatives**: chromakopia-generator.com, chromakopiafonts.com
 - **SSL**: Essential for SEO and user trust
 - **CDN**: Global content distribution
 

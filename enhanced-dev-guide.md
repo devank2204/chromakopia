@@ -369,7 +369,7 @@ gtag('event', 'download_completed', {
 enhanced-chromakopia-generator/
 ├── index.html              # Main HTML with SEO optimization
 ├── app.js                  # Enhanced JavaScript with proper font rendering
-├── style.css              # Base CSS styles from Perplexity design system
+├── style.css 
 ├── style_additions.css     # Additional styles for new features
 ├── favicon.ico            # Favicon and touch icons
 ├── og-image.jpg           # Open Graph image for social sharing
