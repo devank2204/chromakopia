@@ -1876,8 +1876,10 @@ body::before {
 }
 
 /* Reveal on scroll */
-.reveal { opacity: 0; transform: translateY(16px); transition: opacity 600ms var(--ease-standard), transform 600ms var(--ease-standard); }
-.reveal--visible { opacity: 1; transform: none; }
+/* Progressive enhancement: visible by default; hide only when JS-enabled */
+.reveal { opacity: 1; transform: none; transition: opacity 600ms var(--ease-standard), transform 600ms var(--ease-standard); }
+.js .reveal { opacity: 0; transform: translateY(16px); }
+.reveal--visible, .js .reveal--visible { opacity: 1; transform: none; }
 
 .feature-card {
   background: var(--glass-bg);

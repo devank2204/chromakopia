@@ -17,13 +17,16 @@ class ChromakopiaFontGenerator {
         // State
         this.currentText = 'CHROMAKOPIA';
         this.currentColor = '#01823f';
-        this.currentFontSize = 100; 
+        this.currentFontSize = 120; 
         this.currentBackground = 'transparent';
         this.canvasWidth = 1200;
         this.canvasHeight = 1200;
+        this.autoResizePreview = false; // keep preview canvas size fixed so font size visually changes
         this.uploadedImage = null;
         this.fontsLoaded = false;
         this.letterSpacing = 62;
+        this.currentBgColor = '#01823f';
+        this.tintUploadedImage = false; // ensure no color overlay unless explicitly requested
         this.recentColors = this.loadRecentColors(); 
         
         this.init();
@@ -166,18 +169,9 @@ class ChromakopiaFontGenerator {
             });
         }
         
-        // Eyedropper functionality
-        if (this.eyedropperBtn) {
-            this.eyedropperBtn.addEventListener('click', () => {
-                this.useEyedropper();
-            });
-            
-            // Check if EyeDropper API is supported
-            if (!('EyeDropper' in window)) {
-                this.eyedropperBtn.disabled = true;
-                this.eyedropperBtn.title = 'Eyedropper not supported in this browser';
-            }
-        }
+        // Advanced color inputs (text and background)
+        this.bindAdvancedColorInputs();
+        this.bindTintControls();
         
         // Color presets - FIXED
         document.querySelectorAll('.color-preset').forEach(preset => {
@@ -231,33 +225,41 @@ class ChromakopiaFontGenerator {
         if (!this.currentText || this.currentText.trim() === '') {
             this.currentText = 'CHROMAKOPIA';
         }
-        const baseSize = Math.max(24, Math.min(this.currentFontSize, 160));
+        const baseSize = Math.max(24, Math.min(this.currentFontSize, 150));
         const fontsize2 = baseSize;
-        const fontsize1 = Math.round(fontsize2 * 2.5);
-        const fontsize3 = Math.round(fontsize2 * 2.5);
+        const fontsize1 = Math.round(fontsize2 * 2.8);
+        const fontsize3 = Math.round(fontsize2 * 2.8);
         
         // Calculate dynamic text width using actual fonts
         const metrics = this.calculateThreeFontMetrics(this.currentText.toUpperCase(), fontsize1, fontsize2, fontsize3);
-        const horizontalPadding = Math.max(64, Math.round(fontsize2 * 1.0)); // More generous padding
-        const verticalPadding = Math.max(64, Math.round(fontsize1 * 0.5)); // Vertical padding for better centering
+        const horizontalPadding = Math.max(64, Math.round(fontsize2 * 1.2));
+        const verticalPadding = Math.max(64, Math.round(fontsize1 * 0.6));
         const requiredWidth = metrics.totalWidth + horizontalPadding * 2;
-        const requiredHeight = Math.max(fontsize1, fontsize3) + verticalPadding * 2; // Better height calculation
-        const squareSize = Math.max(requiredWidth, requiredHeight, 800); // Minimum 800px for quality
+        const requiredHeight = Math.max(fontsize1, fontsize3) + verticalPadding * 2;
+        const squareSize = Math.max(requiredWidth, requiredHeight, 1200);
         
-        if (squareSize !== this.canvasWidth || squareSize !== this.canvasHeight) {
-            this.canvasWidth = squareSize;
-            this.canvasHeight = squareSize;
-            this.canvas.width = squareSize;
-            this.canvas.height = squareSize;
+        if (this.autoResizePreview) {
+            if (squareSize !== this.canvasWidth || squareSize !== this.canvasHeight) {
+                this.canvasWidth = squareSize;
+                this.canvasHeight = squareSize;
+                this.canvas.width = squareSize;
+                this.canvas.height = squareSize;
+            }
+        } else {
+            // keep fixed size for consistent visual scaling
+            if (this.canvas.width !== this.canvasWidth || this.canvas.height !== this.canvasHeight) {
+                this.canvas.width = this.canvasWidth;
+                this.canvas.height = this.canvasHeight;
+            }
         }
         
         // Clear and draw background (image or color/transparent)
         this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
         this.setBackground();
         
-        // Apply tint overlay if an image exists
-        if (this.uploadedImage) {
-            this.drawTintOverlay(this.currentColor, 0.7);
+        // Optional tint overlay if enabled
+        if (this.uploadedImage && this.tintUploadedImage) {
+            this.drawTintOverlay(this.tintColor || this.currentColor, this.tintOpacity ?? 0.6);
         }
         
         // Perfect centering - both horizontal and vertical
@@ -357,6 +359,21 @@ class ChromakopiaFontGenerator {
         this.ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.restore();
+    }
+
+    bindTintControls() {
+        const toggle = document.getElementById('tint-toggle');
+        const color = document.getElementById('tint-color');
+        const opacity = document.getElementById('tint-opacity');
+        if (!toggle || !color || !opacity) return;
+        const update = () => {
+            this.tintUploadedImage = toggle.checked;
+            this.tintColor = color.value || this.currentColor;
+            this.tintOpacity = Math.max(0, Math.min(1, (Number(opacity.value)||0)/100));
+            this.renderPreview();
+        };
+        [toggle, color, opacity].forEach(el => el.addEventListener('input', update));
+        update();
     }
 
     getFirstLetterSafetyGap(first, fontsize1, fontsize2, metrics) {
@@ -495,12 +512,76 @@ class ChromakopiaFontGenerator {
             this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
         } else if (this.currentBackground && this.currentBackground.startsWith('linear-gradient')) {
             this.applyGradient();
-        } else if (this.currentBackground && this.currentBackground.startsWith('#')) {
+        } else if (this.currentBackground && (this.currentBackground.startsWith('#') || this.currentBackground.startsWith('rgb'))) {
             this.ctx.fillStyle = this.currentBackground;
             this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
         } else {
             this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
         }
+    }
+
+    bindAdvancedColorInputs() {
+        // Text HEX
+        const hex = document.getElementById('text-hex');
+        const r = document.getElementById('text-r');
+        const g = document.getElementById('text-g');
+        const b = document.getElementById('text-b');
+        const bgPicker = document.getElementById('bg-color');
+        const bgHex = document.getElementById('bg-hex');
+        const bgR = document.getElementById('bg-r');
+        const bgG = document.getElementById('bg-g');
+        const bgB = document.getElementById('bg-b');
+
+        const sanitizeHex = (val) => {
+            if (!val) return null;
+            let v = val.trim();
+            if (!v.startsWith('#')) v = '#' + v;
+            const m = v.match(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/);
+            return m ? v : null;
+        };
+        const toHex = (rr, gg, bb) => {
+            const clamp = (n) => Math.max(0, Math.min(255, n|0));
+            return '#' + [clamp(rr), clamp(gg), clamp(bb)].map(x => x.toString(16).padStart(2,'0')).join('');
+        };
+
+        if (hex) hex.addEventListener('change', () => {
+            const v = sanitizeHex(hex.value);
+            if (v) {
+                this.currentColor = v;
+                this.colorPicker.value = v;
+                this.renderPreview();
+            }
+        });
+        [r,g,b].forEach((el) => el && el.addEventListener('change', () => {
+            if (r.value !== '' && g.value !== '' && b.value !== '') {
+                const v = toHex(Number(r.value), Number(g.value), Number(b.value));
+                this.currentColor = v;
+                this.colorPicker.value = v;
+                this.renderPreview();
+            }
+        }));
+
+        if (bgPicker) bgPicker.addEventListener('input', (e) => {
+            this.currentBackground = e.target.value;
+            this.currentBgColor = e.target.value;
+            this.renderPreview();
+        });
+        if (bgHex) bgHex.addEventListener('change', () => {
+            const v = sanitizeHex(bgHex.value);
+            if (v) {
+                this.currentBackground = v;
+                this.currentBgColor = v;
+                this.renderPreview();
+            }
+        });
+        [bgR,bgG,bgB].forEach((el) => el && el.addEventListener('change', () => {
+            if (bgR.value !== '' && bgG.value !== '' && bgB.value !== '') {
+                const v = toHex(Number(bgR.value), Number(bgG.value), Number(bgB.value));
+                this.currentBackground = v;
+                this.currentBgColor = v;
+                this.renderPreview();
+            }
+        }));
     }
     
     drawCheckerboard() {
@@ -715,12 +796,105 @@ class ChromakopiaFontGenerator {
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
+    try { document.documentElement.classList.remove('no-js'); document.documentElement.classList.add('js'); } catch (_) {}
     try {
         const app = new ChromakopiaFontGenerator();
         console.log('Chromakopia Font Generator FULLY FIXED VERSION loaded successfully');
         
     } catch (error) {
         console.error('Failed to initialize app:', error);
+    }
+    // TOC toggle
+    const tocToggle = document.getElementById('toc-toggle');
+    const tocList = document.getElementById('toc-list');
+    if (tocToggle && tocList) {
+        tocToggle.addEventListener('click', () => {
+            const expanded = tocToggle.getAttribute('aria-expanded') === 'true';
+            tocToggle.setAttribute('aria-expanded', String(!expanded));
+            tocToggle.textContent = expanded ? 'Show' : 'Hide';
+            tocList.style.display = expanded ? 'none' : 'block';
+        });
+    }
+
+    // Smooth scroll for in-page links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const targetId = this.getAttribute('href');
+            if (!targetId || targetId.length < 2) return;
+            const el = document.querySelector(targetId);
+            if (!el) return;
+            e.preventDefault();
+            el.scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+
+    // Reading progress bar
+    const progressBar = document.querySelector('.reading-progress');
+    const guide = document.querySelector('#guide');
+    if (progressBar && guide) {
+        const updateProgress = () => {
+            const rect = guide.getBoundingClientRect();
+            const total = guide.scrollHeight - window.innerHeight;
+            const scrolled = Math.min(Math.max(window.scrollY - guide.offsetTop, 0), total);
+            const pct = total > 0 ? (scrolled / total) * 100 : 0;
+            progressBar.style.width = pct + '%';
+        };
+        window.addEventListener('scroll', updateProgress, { passive: true });
+        window.addEventListener('resize', updateProgress);
+        updateProgress();
+    }
+
+    // Active ToC highlighting via IntersectionObserver
+    const tocLinks = Array.from(document.querySelectorAll('#table-of-contents a'));
+    const sections = tocLinks
+        .map(a => document.querySelector(a.getAttribute('href')))
+        .filter(Boolean);
+    if ('IntersectionObserver' in window && tocLinks.length && sections.length) {
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = '#' + entry.target.id;
+                    tocLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === id));
+                }
+            });
+        }, { rootMargin: '-40% 0px -50% 0px', threshold: 0.01 });
+        sections.forEach(sec => io.observe(sec));
+    }
+
+    // Reveal animations for grids
+    const reveals = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window && reveals.length) {
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('reveal--visible');
+                    obs.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        reveals.forEach(el => obs.observe(el));
+    } else {
+        reveals.forEach(el => el.classList.add('reveal--visible'));
+    }
+
+    // Blog utilities: reading time, copy link
+    const readingTimeEl = document.querySelector('.blog-meta__reading-time');
+    const article = document.querySelector('#guide-article');
+    if (readingTimeEl && article) {
+        const text = article.textContent || '';
+        const words = text.trim().split(/\s+/).length;
+        const mins = Math.max(1, Math.round(words / 200));
+        readingTimeEl.textContent = `${mins} min read`;
+    }
+    const copyBtn = document.querySelector('.blog-action__copy');
+    if (copyBtn) {
+        copyBtn.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(window.location.href);
+                copyBtn.classList.add('copied');
+                setTimeout(() => copyBtn.classList.remove('copied'), 1500);
+            } catch (_) {}
+        });
     }
     
     // Global error handling
