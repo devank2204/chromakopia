@@ -1,913 +1,209 @@
-// Chromakopia Font Generator App - FULLY FIXED VERSION
-class ChromakopiaFontGenerator {
-    constructor() {
-        this.canvas = document.getElementById('preview-canvas');
-        this.ctx = this.canvas.getContext('2d');
-        this.textInput = document.getElementById('text-input');
-        this.colorPicker = document.getElementById('text-color');
-        this.fontSizeSlider = document.getElementById('font-size');
-        this.sizeValue = document.getElementById('size-value');
-        this.downloadBtn = document.getElementById('download-btn');
-        this.authenticGreenCheckbox = document.getElementById('use-authentic-green');
-        this.bgUploadInput = document.getElementById('bg-upload');
-        this.eyedropperBtn = document.getElementById('eyedropper-btn');
-        this.recentColorsList = document.getElementById('recent-colors-list');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Chromakopia Font Generator</title>
+    <meta name="description" content="Learn the story behind Chromakopia Font Generator: inspiration, technical approach, and community focus inspired by Tyler, The Creator's Chromakopia era.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://chromakopiafont.site/about">
 
-        
-        // State
-        this.currentText = 'CHROMAKOPIA';
-        this.currentColor = '#01823f';
-        this.currentFontSize = 120; 
-        this.currentBackground = 'transparent';
-        this.canvasWidth = 1200;
-        this.canvasHeight = 1200;
-        this.autoResizePreview = false; // keep preview canvas size fixed so font size visually changes
-        this.uploadedImage = null;
-        this.fontsLoaded = false;
-        this.letterSpacing = 62;
-        this.currentBgColor = '#01823f';
-        this.tintUploadedImage = false; // ensure no color overlay unless explicitly requested
-        this.recentColors = this.loadRecentColors(); 
-        
-        this.init();
-    }
-    
-    init() {
-        this.setupCanvas();
-        this.bindEvents();
-        this.initFAQ();
-        
-        // Set initial values
-        this.textInput.value = this.currentText;
-        this.colorPicker.value = this.currentColor;
-        this.fontSizeSlider.value = this.currentFontSize;
-        this.sizeValue.textContent = `${this.currentFontSize}px`;
-        
-        // Initialize recent colors display
-        this.updateRecentColorsDisplay();
-        
-        // Defer first render until fonts are loaded for authenticity
-        this.loadFonts().then(() => {
-            this.fontsLoaded = true;
-            this.renderPreview();
-        }).catch(() => {
-            // If fonts fail to load, still render with system fallback
-            this.renderPreview();
-        });
-    }
-    
-    setupCanvas() {
-        // Set canvas actual size (square by default)
-        this.canvas.width = this.canvasWidth;
-        this.canvas.height = this.canvasHeight;
-        
-        // Set display size via CSS
-        this.canvas.style.width = '100%';
-        this.canvas.style.height = '300px';
-        this.canvas.style.objectFit = 'contain';
-    }
-    
-    bindEvents() {
-        // Text input events with immediate update
-        this.textInput.addEventListener('input', (e) => {
-            this.currentText = e.target.value || 'CHROMAKOPIA';
-            console.log('Text updated:', this.currentText);
-            this.renderPreview();
-        });
-        
-        this.textInput.addEventListener('keyup', (e) => {
-            this.currentText = e.target.value || 'CHROMAKOPIA';
-            this.renderPreview();
-        });
-        
-        this.textInput.addEventListener('paste', (e) => {
-            setTimeout(() => {
-                this.currentText = e.target.value || 'CHROMAKOPIA';
-                this.renderPreview();
-            }, 10);
-        });
-        
-        // Color picker events - FIXED with better event handling
-        this.colorPicker.addEventListener('input', (e) => {
-            this.currentColor = e.target.value;
-            this.addToRecentColors(this.currentColor);
-            console.log('Color updated:', this.currentColor);
-            this.renderPreview();
-        });
-        
-        this.colorPicker.addEventListener('change', (e) => {
-            this.currentColor = e.target.value;
-            console.log('Color changed:', this.currentColor);
-            this.renderPreview();
-        });
-        
-        // Font size slider
-        this.fontSizeSlider.addEventListener('input', (e) => {
-            this.currentFontSize = parseInt(e.target.value);
-            this.sizeValue.textContent = `${this.currentFontSize}px`;
-            console.log('Font size updated:', this.currentFontSize);
-            this.renderPreview();
-        });
-        
+    <!-- Open Graph -->
+    <meta property="og:title" content="About Chromakopia Font Generator">
+    <meta property="og:description" content="The story, craft, and community behind the tool inspired by Tyler's Chromakopia era.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://chromakopiafont.site/about">
 
-        
-        // Authentic green checkbox
-        if (this.authenticGreenCheckbox) {
-            this.authenticGreenCheckbox.addEventListener('change', () => {
-                if (this.authenticGreenCheckbox.checked) {
-                    this.currentColor = '#01823f';
-                    this.colorPicker.value = '#01823f';
-                    this.colorPicker.setAttribute('disabled', 'disabled');
-                } else {
-                    this.colorPicker.removeAttribute('disabled');
-                }
-                this.renderPreview();
-            });
-        }
-        
-        // Background image upload with validation
-        if (this.bgUploadInput) {
-            this.bgUploadInput.addEventListener('change', (e) => {
-                const file = e.target.files && e.target.files[0];
-                if (!file) return;
-                
-                // Validate file size (5MB max)
-                if (file.size > 5 * 1024 * 1024) {
-                    alert('File size must be less than 5MB');
-                    e.target.value = '';
-                    return;
-                }
-                
-                // Validate file type
-                if (!file.type.startsWith('image/')) {
-                    alert('Please select a valid image file');
-                    e.target.value = '';
-                    return;
-                }
-                
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        this.uploadedImage = img;
-                        // Clear any active background option
-                        document.querySelectorAll('.bg-option').forEach(opt => opt.classList.remove('active'));
-                        this.currentBackground = 'image';
-                        this.renderPreview();
-                    };
-                    img.onerror = () => {
-                        alert('Failed to load image. Please try another file.');
-                        e.target.value = '';
-                    };
-                    img.src = ev.target.result;
-                };
-                reader.onerror = () => {
-                    alert('Failed to read file. Please try again.');
-                    e.target.value = '';
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-        
-        // Advanced color inputs (text and background)
-        this.bindAdvancedColorInputs();
-        this.bindTintControls();
-        
-        // Color presets - FIXED
-        document.querySelectorAll('.color-preset').forEach(preset => {
-            preset.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const color = preset.dataset.color;
-                console.log('Color preset clicked:', color);
-                this.currentColor = color;
-                this.colorPicker.value = color;
-                this.addToRecentColors(color);
-                this.updateActiveColorPreset(preset);
-                this.renderPreview();
-            });
-        });
-        
-        // Background options - FIXED
-        document.querySelectorAll('.bg-option').forEach(option => {
-            option.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                const bg = option.dataset.bg;
-                console.log('Background option clicked:', bg);
-                this.currentBackground = bg;
-                // Clear uploaded image when selecting other backgrounds
-                if (bg !== 'image') {
-                    this.uploadedImage = null;
-                    if (this.bgUploadInput) {
-                        this.bgUploadInput.value = '';
-                    }
-                }
-                this.updateActiveBackground(option);
-                this.renderPreview();
-            });
-        });
-        
-        // Download button
-        this.downloadBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            this.downloadImage();
-        });
-        
-        // Window resize
-        window.addEventListener('resize', this.debounce(() => {
-            this.setupCanvas();
-            this.renderPreview();
-        }, 250));
-    }
-    
-    renderPreview() {
-        if (!this.currentText || this.currentText.trim() === '') {
-            this.currentText = 'CHROMAKOPIA';
-        }
-        const baseSize = Math.max(24, Math.min(this.currentFontSize, 150));
-        const fontsize2 = baseSize;
-        const fontsize1 = Math.round(fontsize2 * 2.8);
-        const fontsize3 = Math.round(fontsize2 * 2.8);
-        
-        // Calculate dynamic text width using actual fonts
-        const metrics = this.calculateThreeFontMetrics(this.currentText.toUpperCase(), fontsize1, fontsize2, fontsize3);
-        const horizontalPadding = Math.max(64, Math.round(fontsize2 * 1.2));
-        const verticalPadding = Math.max(64, Math.round(fontsize1 * 0.6));
-        const requiredWidth = metrics.totalWidth + horizontalPadding * 2;
-        const requiredHeight = Math.max(fontsize1, fontsize3) + verticalPadding * 2;
-        const squareSize = Math.max(requiredWidth, requiredHeight, 1200);
-        
-        if (this.autoResizePreview) {
-            if (squareSize !== this.canvasWidth || squareSize !== this.canvasHeight) {
-                this.canvasWidth = squareSize;
-                this.canvasHeight = squareSize;
-                this.canvas.width = squareSize;
-                this.canvas.height = squareSize;
-            }
-        } else {
-            // keep fixed size for consistent visual scaling
-            if (this.canvas.width !== this.canvasWidth || this.canvas.height !== this.canvasHeight) {
-                this.canvas.width = this.canvasWidth;
-                this.canvas.height = this.canvasHeight;
-            }
-        }
-        
-        // Clear and draw background (image or color/transparent)
-        this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-        this.setBackground();
-        
-        // Optional tint overlay if enabled
-        if (this.uploadedImage && this.tintUploadedImage) {
-            this.drawTintOverlay(this.tintColor || this.currentColor, this.tintOpacity ?? 0.6);
-        }
-        
-        // Perfect centering - both horizontal and vertical
-        // Calculate precise vertical center based on font metrics
-        const textHeight = Math.max(fontsize1, fontsize3); // Height of the tallest characters
-        const verticalCenter = this.canvas.height / 2;
-        const y = Math.round(verticalCenter + (textHeight * 0.15)); // Slight offset for visual balance
-        
-        // Perfect horizontal centering
-        const startX = Math.round((this.canvas.width - metrics.totalWidth) / 2);
-        
-        this.drawThreeFontText(this.currentText.toUpperCase(), startX, y, fontsize1, fontsize2, fontsize3, metrics);
-        
-        this.updateResolutionLabel();
-    }
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="About Chromakopia Font Generator">
+    <meta name="twitter:description" content="The story, craft, and community behind the tool inspired by Tyler's Chromakopia era.">
 
-    loadFonts() {
-        if (typeof FontFaceObserver === 'undefined') {
-            return Promise.resolve();
-        }
-        const font1 = new FontFaceObserver('ChromakopiaType1');
-        const font2 = new FontFaceObserver('ChromakopiaType2');
-        const font3 = new FontFaceObserver('ChromakopiaType3');
-        return Promise.all([font1.load(), font2.load(), font3.load()]);
-    }
+    <link rel="stylesheet" href="style.min.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header__content" style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
+                <h1 class="header__logo" style="margin:0;">
+                    <a href="/" style="text-decoration: none; color: inherit;">CHROMAKOPIA<span class="header__logo-accent">Font Generator</span></a>
+                </h1>
+                <nav aria-label="Primary" class="hidden-mobile">
+                    <a href="/" class="footer__link">Home</a>
+                    <a href="/about" class="footer__link">About</a>
+                    <a href="/#guide" class="footer__link">Guide</a>
+                    <a href="/#faq" class="footer__link">FAQ</a>
+                </nav>
+            </div>
+        </div>
+    </header>
 
-    updateResolutionLabel() {
-        const el = document.querySelector('.preview-resolution');
-        if (el) {
-            el.textContent = `${this.canvas.width}×${this.canvas.height}`;
-        }
-    }
+    <main class="legal-page">
+        <div class="container">
+            <div class="legal-content">
+                <header class="legal-header">
+                    <h1>About Chromakopia Font</h1>
+                    <p class="legal-subtitle">The story, craft, and community behind the tool</p>
+                    <p class="legal-updated">Last Updated: August 2025</p>
+                </header>
 
-    getContextFont(size, which) {
-        const family = which === 1 ? 'ChromakopiaType1' : (which === 2 ? 'ChromakopiaType2' : 'ChromakopiaType3');
-        return `${size}px "${family}", sans-serif`;
-    }
+                <article class="blog" id="about-article">
+                    <section class="legal-section">
+                        <h2>Hey there, Tyler fans and typography enthusiasts! 👋</h2>
+                        <p>I'm the creator behind Chromakopia Font, and honestly... this whole thing started because I was absolutely obsessed with the visual evolution Tyler, The Creator went through with his Chromakopia era.</p>
+                        <p>Like many of you, I've been following Tyler's journey since the Odd Future days. From the raw, chaotic energy of <em>Bastard</em> and <em>Goblin</em> to the pastel sophistication of <em>IGOR</em> and <em>Call Me If You Get Lost</em>—each album brought its own visual language. But when <em>Chromakopia</em> dropped in October 2024, something clicked differently.</p>
+                    </section>
 
-    calculateThreeFontMetrics(text, fontsize1, fontsize2, fontsize3) {
-        const ctx = this.ctx;
-        if (!text || text.length === 0) {
-            return { totalWidth: 0, firstWidth: 0, middleWidth: 0, lastWidth: 0, spacingOffset: 0, middleText: '' };
-        }
-        const letters = text.split('');
-        const first = letters[0];
-        const last = letters[letters.length - 1];
-        const middleText = letters.slice(1, letters.length - 1).join('');
-        
-        // Simple, reliable approach: measure each part and use fixed proportional spacing
-        ctx.font = this.getContextFont(fontsize1, 1);
-        const firstWidth = ctx.measureText(first).width;
-        
-        ctx.font = this.getContextFont(fontsize2, 2);
-        const middleWidth = middleText.length ? ctx.measureText(middleText).width : 0;
-        
-        ctx.font = this.getContextFont(fontsize3, 3);
-        const lastWidth = ctx.measureText(last).width;
-        
-        // Dynamic spacing based on slider (20-100% maps to 0.2-1.0 multiplier)
-        const spacingMultiplier = this.letterSpacing / 100;
-        const spacingOffset = Math.round(fontsize2 * spacingMultiplier);
-        const totalWidth = firstWidth + spacingOffset + middleWidth + lastWidth;
-        return { totalWidth, firstWidth, middleWidth, lastWidth, spacingOffset, middleText };
-    }
+                    <section class="legal-section">
+                        <h2>The "Holy Shit" Moment</h2>
+                        <p>I'll never forget seeing that album cover for the first time. The bold black text on that deep green background, those distinctive horn-like curves extending from the letters—it was unlike anything Tyler had done before. It felt mature, confident, and somehow deeply personal while being completely accessible.</p>
+                        <p>Within hours of the album's release, I was diving deep into typography forums, trying to identify the base font (turned out to be Poleno SemiBold—shout out to DizajnDesign for that masterpiece). But more importantly, I was trying to figure out how Tyler's team created those signature "horned" modifications.</p>
+                    </section>
 
-    drawThreeFontText(text, startX, y, fontsize1, fontsize2, fontsize3, metrics) {
-        const ctx = this.ctx;
-        const letters = text.split('');
-        if (letters.length === 0) return;
-        let x = startX;
-        
-        // First letter
-        ctx.font = this.getContextFont(fontsize1, 1);
-        ctx.textBaseline = 'alphabetic';
-        ctx.textAlign = 'left';
-        ctx.fillStyle = this.currentColor;
-        ctx.fillText(letters[0], x, y);
-        x += metrics.firstWidth + metrics.spacingOffset;
-        
-        // Middle substring (preserves kerning)
-        ctx.font = this.getContextFont(fontsize2, 2);
-        if (metrics.middleText && metrics.middleText.length) {
-            ctx.fillText(metrics.middleText, x, y);
-            x += metrics.middleWidth;
-        }
-        
-        // Last letter
-        ctx.font = this.getContextFont(fontsize3, 3);
-        if (letters.length > 1) {
-            ctx.fillText(letters[letters.length - 1], x, y);
-        }
-    }
+                    <section class="legal-section">
+                        <h2>Why Another Font Generator?</h2>
+                        <ul>
+                            <li>Basic text-to-image converters with zero customization</li>
+                            <li>Cluttered with ads and terrible user experience</li>
+                            <li>Missing the cultural context that makes this aesthetic meaningful</li>
+                            <li>Not actually understanding what makes the typography special</li>
+                        </ul>
+                        <p>As someone with a background in graphic design and a genuine appreciation for Tyler's artistic evolution, I knew I could build something better—something that actually honored the craftsmanship behind the original while giving fans the tools to express themselves authentically.</p>
+                    </section>
 
-    drawTintOverlay(hexColor, alpha) {
-        const { r, g, b } = this.hexToRgb(hexColor);
-        this.ctx.save();
-        this.ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`;
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.restore();
-    }
+                    <section class="legal-section">
+                        <h2>The Technical Obsession</h2>
+                        <ul>
+                            <li>The precise angle and curve of those horn modifications</li>
+                            <li>How the original green background interacts with different text colors</li>
+                            <li>The relationship between Poleno SemiBold and the supporting Rift Soft Medium</li>
+                            <li>How to maintain the font's integrity across different platforms and devices</li>
+                        </ul>
+                        <p>This isn't just about slapping some decorative elements onto text. It's about understanding why Tyler and his team made specific typographic choices, and how those choices contribute to the album's overall emotional impact.</p>
+                    </section>
 
-    bindTintControls() {
-        const toggle = document.getElementById('tint-toggle');
-        const color = document.getElementById('tint-color');
-        const opacity = document.getElementById('tint-opacity');
-        if (!toggle || !color || !opacity) return;
-        const update = () => {
-            this.tintUploadedImage = toggle.checked;
-            this.tintColor = color.value || this.currentColor;
-            this.tintOpacity = Math.max(0, Math.min(1, (Number(opacity.value)||0)/100));
-            this.renderPreview();
-        };
-        [toggle, color, opacity].forEach(el => el.addEventListener('input', update));
-        update();
-    }
+                    <section class="legal-section">
+                        <h2>Building Community, Not Just Tools</h2>
+                        <p>What excites me most isn't just the technical side—it's watching how fans use these tools to connect with Tyler's art and express their own creativity. I've seen people create:</p>
+                        <ul>
+                            <li>Incredible fan art incorporating the Chromakopia aesthetic</li>
+                            <li>Social media profiles that feel authentically connected to Tyler's vision</li>
+                            <li>Original designs that push the typography in new directions</li>
+                            <li>Community challenges that bring Tyler fans together</li>
+                        </ul>
+                    </section>
 
-    getFirstLetterSafetyGap(first, fontsize1, fontsize2, metrics) {
-        const aggressiveRightLetters = 'CGSTYQJURVWXZHK';
-        const base = Math.round(fontsize2 * 0.12);
-        if (aggressiveRightLetters.includes(first)) {
-            const ext = typeof metrics.actualBoundingBoxRight === 'number' ? metrics.actualBoundingBoxRight : metrics.width;
-            return Math.max(base, Math.round(ext * 0.18));
-        }
-        // Subtle extra gap for default
-        return Math.round(fontsize2 * 0.06);
-    }
+                    <section class="legal-section">
+                        <h2>The Bigger Picture</h2>
+                        <p>Tyler has always been about pushing boundaries and refusing to fit into predetermined boxes. His visual evolution—from the aggressive early days to the sophisticated, colorful world of <em>IGOR</em> to the mature, earthy tones of <em>Chromakopia</em>—shows an artist constantly growing and experimenting.</p>
+                        <p>This tool is my small contribution to that creative ecosystem. It's for the fans who want to participate in Tyler's visual language, the designers who appreciate good typography, and anyone who believes that creativity should be accessible.</p>
+                    </section>
 
-    hexToRgb(hex) {
-        let c = hex.replace('#', '');
-        if (c.length === 3) {
-            c = c.split('').map(s => s + s).join('');
-        }
-        const num = parseInt(c, 16);
-        return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
-    }
-    
-    measureGlyphAdvance(char, size, which) {
-        // Draw the glyph on an offscreen canvas and find the rightmost non-empty pixel
-        const off = document.createElement('canvas');
-        const pad = Math.ceil(size * 0.5);
-        off.width = size * 3;
-        off.height = size * 3;
-        const octx = off.getContext('2d');
-        octx.clearRect(0, 0, off.width, off.height);
-        octx.fillStyle = '#000';
-        octx.textBaseline = 'alphabetic';
-        octx.textAlign = 'left';
-        octx.font = this.getContextFont(size, which);
-        const baselineY = Math.round(off.height / 2);
-        octx.fillText(char, pad, baselineY);
-        const img = octx.getImageData(0, 0, off.width, off.height).data;
-        let right = 0;
-        for (let y = 0; y < off.height; y++) {
-            for (let x = off.width - 1; x >= 0; x--) {
-                const idx = (y * off.width + x) * 4 + 3;
-                if (img[idx] !== 0) {
-                    right = Math.max(right, x);
-                break;
-                }
-            }
-        }
-        // Subtract left pad to get advance width from origin
-        return Math.max(0, right - pad);
-    }
+                    <section class="legal-section">
+                        <h2>What Makes This Different?</h2>
+                        <ul>
+                            <li><strong>Authentic Understanding:</strong> I genuinely study and appreciate the craftsmanship behind Tyler's visual choices.</li>
+                            <li><strong>Technical Quality:</strong> Carefully designed to match the precision and intentionality of the original typography.</li>
+                            <li><strong>Community Focus:</strong> No ads or data harvesting—built for fans and designers.</li>
+                            <li><strong>Continuous Improvement:</strong> Ongoing refinements based on feedback.</li>
+                        </ul>
+                    </section>
 
-    measureTextLeftExtent(text, size, which) {
-        // Find left-most painted pixel of the text block to estimate left sidebearing/overhang
-        const off = document.createElement('canvas');
-        const pad = Math.ceil(size * 0.5);
-        off.width = size * 6;
-        off.height = size * 3;
-        const octx = off.getContext('2d');
-        octx.clearRect(0, 0, off.width, off.height);
-        octx.fillStyle = '#000';
-        octx.textBaseline = 'alphabetic';
-        octx.textAlign = 'left';
-        octx.font = this.getContextFont(size, which);
-        const baselineY = Math.round(off.height / 2);
-        octx.fillText(text, pad, baselineY);
-        const img = octx.getImageData(0, 0, off.width, off.height).data;
-        let left = off.width;
-        for (let y = 0; y < off.height; y++) {
-            for (let x = 0; x < off.width; x++) {
-                const idx = (y * off.width + x) * 4 + 3;
-                if (img[idx] !== 0) {
-                    left = Math.min(left, x);
-                    break;
-                }
-            }
-        }
-        return Math.max(0, left - pad);
-    }
-    
-    // legacy methods kept for compatibility with feature cards; not used in three-font pipeline
-    renderChromakopiaText(text, centerX, centerY, fontSize) {}
-    
-    renderChromakopiaLetter(letter, x, y, size, color, index, totalLetters) {}
-    
-    addChromakopiaEffects() {}
-    
-    drawChromakopiaHorns() {}
-    
-    drawAngularSpike() {}
-    
-    addCornerDetails() {}
-    
-    drawTriangleDetail() {}
-    
-    calculateTextWidth(letters, fontSize, letterSpacing) {
-        let totalWidth = 0;
-        letters.forEach(letter => {
-            if (letter === ' ') {
-                totalWidth += fontSize * 0.4;
-            } else {
-                totalWidth += this.getLetterWidth(letter, fontSize) + letterSpacing;
-            }
-        });
-        return totalWidth - letterSpacing;
-    }
-    
-    getLetterWidth(letter, fontSize) {
-        const wideLetters = 'MWQO';
-        const narrowLetters = 'ILT';
-        const mediumLetters = 'FJPRY';
-        
-        if (wideLetters.includes(letter)) {
-            return fontSize * 0.75;
-        } else if (narrowLetters.includes(letter)) {
-            return fontSize * 0.35;
-        } else if (mediumLetters.includes(letter)) {
-            return fontSize * 0.5;
-        } else {
-            return fontSize * 0.6;
-        }
-    }
-    
-    setBackground() {
-        if (this.uploadedImage) {
-            // Draw uploaded image cropped to square, cover style
-            const img = this.uploadedImage;
-            const s = Math.min(img.width, img.height);
-            const sx = Math.floor((img.width - s) / 2);
-            const sy = Math.floor((img.height - s) / 2);
-            this.ctx.drawImage(img, sx, sy, s, s, 0, 0, this.canvas.width, this.canvas.height);
-            return;
-        }
-        if (this.currentBackground === 'transparent') {
-            // Transparent export support: don't draw checkerboard to the actual canvas; only in preview.
-            // For preview, we can simulate checkerboard by CSS; here keep transparent.
-            this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-        } else if (this.currentBackground && this.currentBackground.startsWith('linear-gradient')) {
-            this.applyGradient();
-        } else if (this.currentBackground && (this.currentBackground.startsWith('#') || this.currentBackground.startsWith('rgb'))) {
-            this.ctx.fillStyle = this.currentBackground;
-            this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
-        } else {
-            this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-        }
-    }
+                    <section class="legal-section">
+                        <h2>A Personal Note</h2>
+                        <p>Tyler's music has been the soundtrack to some of the most important periods of my life. From skating around Los Angeles while blasting <em>Wolf</em> to discovering new dimensions of creativity through <em>Flower Boy</em>, his evolution has paralleled my own growth as a designer and human being.</p>
+                        <p>Creating this tool has been my way of giving back to a community and an artist that's given me so much inspiration.</p>
+                    </section>
 
-    bindAdvancedColorInputs() {
-        // Text HEX
-        const hex = document.getElementById('text-hex');
-        const r = document.getElementById('text-r');
-        const g = document.getElementById('text-g');
-        const b = document.getElementById('text-b');
-        const bgPicker = document.getElementById('bg-color');
-        const bgHex = document.getElementById('bg-hex');
-        const bgR = document.getElementById('bg-r');
-        const bgG = document.getElementById('bg-g');
-        const bgB = document.getElementById('bg-b');
+                    <section class="legal-section">
+                        <h2>Looking Forward</h2>
+                        <p>Tyler never stops evolving—and neither will this tool. I'm constantly working on new features, better customization options, and ways to make the typography even more authentic while giving users creative freedom.</p>
+                        <p>If you've made it this far, thanks for reading. Keep experimenting, keep creating, and keep pushing boundaries.</p>
+                    </section>
 
-        const sanitizeHex = (val) => {
-            if (!val) return null;
-            let v = val.trim();
-            if (!v.startsWith('#')) v = '#' + v;
-            const m = v.match(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/);
-            return m ? v : null;
-        };
-        const toHex = (rr, gg, bb) => {
-            const clamp = (n) => Math.max(0, Math.min(255, n|0));
-            return '#' + [clamp(rr), clamp(gg), clamp(bb)].map(x => x.toString(16).padStart(2,'0')).join('');
-        };
+                    <section class="legal-section">
+                        <h2>FAQ About This Project</h2>
+                        <div class="faq__list">
+                            <div class="faq-item">
+                                <button class="faq-item__question" aria-expanded="false"><span>Are you affiliated with Tyler, The Creator or his team?</span><span class="faq-item__icon">+</span></button>
+                                <div class="faq-item__answer"><p>Nope! This is an independent fan project created out of appreciation for Tyler's artistic vision. I'm not officially connected to Tyler, Columbia Records, or anyone on his team.</p></div>
+                            </div>
+                            <div class="faq-item">
+                                <button class="faq-item__question" aria-expanded="false"><span>How did you learn to create typography tools?</span><span class="faq-item__icon">+</span></button>
+                                <div class="faq-item__answer"><p>I've worked in graphic design for several years with a focus on web-based tools and typography. This project combines technical skill with genuine appreciation for Tyler's visual evolution.</p></div>
+                            </div>
+                            <div class="faq-item">
+                                <button class="faq-item__question" aria-expanded="false"><span>Can I use the generated text commercially?</span><span class="faq-item__icon">+</span></button>
+                                <div class="faq-item__answer"><p>Yes—generated images are free to use for personal and commercial projects. Please use the aesthetic respectfully and don't claim official association.</p></div>
+                            </div>
+                            <div class="faq-item">
+                                <button class="faq-item__question" aria-expanded="false"><span>Will you add other Tyler era fonts?</span><span class="faq-item__icon">+</span></button>
+                                <div class="faq-item__answer"><p>I'm considering <em>IGOR</em> and <em>CMIYGL</em> styles. Let me know which era you're most interested in.</p></div>
+                            </div>
+                            <div class="faq-item">
+                                <button class="faq-item__question" aria-expanded="false"><span>Is this tool really free?</span><span class="faq-item__icon">+</span></button>
+                                <div class="faq-item__answer"><p>Yes! No hidden fees, no premium tiers, no data harvesting.</p></div>
+                            </div>
+                        </div>
+                    </section>
 
-        if (hex) hex.addEventListener('change', () => {
-            const v = sanitizeHex(hex.value);
-            if (v) {
-                this.currentColor = v;
-                this.colorPicker.value = v;
-                this.renderPreview();
-            }
-        });
-        [r,g,b].forEach((el) => el && el.addEventListener('change', () => {
-            if (r.value !== '' && g.value !== '' && b.value !== '') {
-                const v = toHex(Number(r.value), Number(g.value), Number(b.value));
-                this.currentColor = v;
-                this.colorPicker.value = v;
-                this.renderPreview();
-            }
-        }));
+                    <div class="legal-footer">
+                        <a href="/" class="btn btn--primary">← Back to Generator</a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </main>
 
-        if (bgPicker) bgPicker.addEventListener('input', (e) => {
-            this.currentBackground = e.target.value;
-            this.currentBgColor = e.target.value;
-            this.renderPreview();
-        });
-        if (bgHex) bgHex.addEventListener('change', () => {
-            const v = sanitizeHex(bgHex.value);
-            if (v) {
-                this.currentBackground = v;
-                this.currentBgColor = v;
-                this.renderPreview();
-            }
-        });
-        [bgR,bgG,bgB].forEach((el) => el && el.addEventListener('change', () => {
-            if (bgR.value !== '' && bgG.value !== '' && bgB.value !== '') {
-                const v = toHex(Number(bgR.value), Number(bgG.value), Number(bgB.value));
-                this.currentBackground = v;
-                this.currentBgColor = v;
-                this.renderPreview();
-            }
-        }));
-    }
-    
-    drawCheckerboard() {
-        // No-op: we keep transparency in canvas; checkerboard is handled by CSS in preview
-    }
-    
-    applyGradient() {
-        if (this.currentBackground.includes('#01823f')) {
-            const gradient = this.ctx.createLinearGradient(0, 0, this.canvasWidth, this.canvasHeight);
-            gradient.addColorStop(0, '#01823f');
-            gradient.addColorStop(1, '#2d5016');
-            this.ctx.fillStyle = gradient;
-        } else {
-            const gradient = this.ctx.createLinearGradient(0, 0, this.canvasWidth, this.canvasHeight);
-            gradient.addColorStop(0, '#1a1a1a');
-            gradient.addColorStop(1, '#0a0a0a');
-            this.ctx.fillStyle = gradient;
-        }
-        this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
-    }
-    
-    updateActiveColorPreset(activePreset) {
-        document.querySelectorAll('.color-preset').forEach(preset => {
-            preset.classList.remove('active');
-        });
-        activePreset.classList.add('active');
-    }
-    
-    updateActiveBackground(activeOption) {
-        document.querySelectorAll('.bg-option').forEach(option => {
-            option.classList.remove('active');
-        });
-        activeOption.classList.add('active');
-    }
-    
-    downloadImage() {
-        try {
-            const downloadCanvas = document.createElement('canvas');
-            const downloadCtx = downloadCanvas.getContext('2d');
-            
-            const scale = 4;
-            downloadCanvas.width = this.canvasWidth * scale;
-            downloadCanvas.height = this.canvasHeight * scale;
-            downloadCtx.scale(scale, scale);
-            
-            const originalCtx = this.ctx;
-            this.ctx = downloadCtx;
-            
-            this.renderPreview();
-            
-            this.ctx = originalCtx;
-            
-            const link = document.createElement('a');
-            const timestamp = new Date().toISOString().slice(0, 10);
-            const cleanText = this.currentText.replace(/[^a-zA-Z0-9]/g, '').substring(0, 10);
-            link.download = `chromakopia-${cleanText}-${timestamp}.png`;
-            
-            downloadCanvas.toBlob((blob) => {
-                const url = URL.createObjectURL(blob);
-                link.href = url;
-                
-                this.downloadBtn.classList.add('loading');
-                this.downloadBtn.textContent = 'Downloading...';
-                
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                
-                setTimeout(() => {
-                    URL.revokeObjectURL(url);
-                    this.downloadBtn.classList.remove('loading');
-                    this.downloadBtn.innerHTML = '<i data-lucide="download-cloud"></i><span>Download High Quality PNG</span>';
-                    if (typeof lucide !== 'undefined') {
-                        lucide.createIcons();
-                    }
-                }, 1000);
-                
-            }, 'image/png', 1.0);
-            
-        } catch (error) {
-            console.error('Download failed:', error);
-            alert('Download failed. Please try again.');
-            this.downloadBtn.classList.remove('loading');
-            this.downloadBtn.innerHTML = '<i data-lucide="download-cloud"></i><span>Download High Quality PNG</span>';
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__content">
+                <div class="footer__brand">
+                    <h3 class="header__logo">CHROMAKOPIA<span class="header__logo-accent">Font Generator</span></h3>
+                    <p class="header__subtitle">Create stunning Tyler-inspired text designs instantly</p>
+                </div>
+                <div class="footer__links">
+                    <div class="footer__section">
+                        <h4 class="footer__section-title">Legal</h4>
+                        <ul class="footer__list">
+                            <li><a href="/terms" class="footer__link">Terms of Service</a></li>
+                            <li><a href="/privacy" class="footer__link">Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer__section">
+                        <h4 class="footer__section-title">Resources</h4>
+                        <ul class="footer__list">
+                            <li><a href="/about" class="footer__link">About</a></li>
+                            <li><a href="/#guide" class="footer__link">Guide</a></li>
+                            <li><a href="/#faq" class="footer__link">FAQ</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copyright">© 2025 Chromakopia Font Generator. Free to use forever.</p>
+                <p class="footer__note">No registration required • Privacy-focused • Browser-based generation</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
-        }
-    }
-    
-    initFAQ() {
-        document.querySelectorAll('.faq-item__question').forEach(question => {
-            question.addEventListener('click', () => {
-                const isExpanded = question.getAttribute('aria-expanded') === 'true';
-                const answer = question.nextElementSibling;
-                
-                document.querySelectorAll('.faq-item__question').forEach(q => {
-                    if (q !== question) {
-                        q.setAttribute('aria-expanded', 'false');
-                        q.nextElementSibling.classList.remove('active');
-                    }
+            // FAQ toggles
+            document.querySelectorAll('.faq-item__question').forEach(q => {
+                q.addEventListener('click', () => {
+                    const expanded = q.getAttribute('aria-expanded') === 'true';
+                    q.setAttribute('aria-expanded', !expanded);
+                    q.nextElementSibling.classList.toggle('active', !expanded);
                 });
-                
-                question.setAttribute('aria-expanded', !isExpanded);
-                answer.classList.toggle('active', !isExpanded);
             });
         });
-    }
-    
-    debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
-    }
-    
-    // Eyedropper functionality
-    async useEyedropper() {
-        if (!('EyeDropper' in window)) {
-            alert('Eyedropper is not supported in this browser. Try using Chrome, Edge, or another Chromium-based browser.');
-            return;
-        }
-        
-        try {
-            const eyeDropper = new EyeDropper();
-            const result = await eyeDropper.open();
-            
-            if (result && result.sRGBHex) {
-                this.currentColor = result.sRGBHex;
-                this.colorPicker.value = result.sRGBHex;
-                this.addToRecentColors(result.sRGBHex);
-                this.renderPreview();
-                console.log('Color picked:', result.sRGBHex);
-            }
-        } catch (error) {
-            if (error.name !== 'AbortError') {
-                console.error('Eyedropper error:', error);
-                alert('Failed to use eyedropper. Please try again.');
-            }
-        }
-    }
-    
-    // Recent colors management
-    loadRecentColors() {
-        try {
-            const stored = localStorage.getItem('chromakopia-recent-colors');
-            return stored ? JSON.parse(stored) : [];
-        } catch (error) {
-            console.error('Failed to load recent colors:', error);
-            return [];
-        }
-    }
-    
-    saveRecentColors() {
-        try {
-            localStorage.setItem('chromakopia-recent-colors', JSON.stringify(this.recentColors));
-        } catch (error) {
-            console.error('Failed to save recent colors:', error);
-        }
-    }
-    
-    addToRecentColors(color) {
-        if (!color || color === this.recentColors[0]) return;
-        
-        // Remove if already exists
-        const index = this.recentColors.indexOf(color);
-        if (index > -1) {
-            this.recentColors.splice(index, 1);
-        }
-        
-        // Add to beginning
-        this.recentColors.unshift(color);
-        
-        // Keep only last 8 colors
-        if (this.recentColors.length > 8) {
-            this.recentColors = this.recentColors.slice(0, 8);
-        }
-        
-        this.saveRecentColors();
-        this.updateRecentColorsDisplay();
-    }
-    
-    updateRecentColorsDisplay() {
-        if (!this.recentColorsList) return;
-        
-        this.recentColorsList.innerHTML = '';
-        
-        if (this.recentColors.length === 0) {
-            this.recentColorsList.innerHTML = '<span style="color: var(--color-text-secondary); font-size: var(--font-size-xs);">No recent colors</span>';
-            return;
-        }
-        
-        this.recentColors.forEach(color => {
-            const colorBtn = document.createElement('button');
-            colorBtn.className = 'recent-color';
-            colorBtn.style.backgroundColor = color;
-            colorBtn.title = color;
-            colorBtn.addEventListener('click', () => {
-                this.currentColor = color;
-                this.colorPicker.value = color;
-                this.renderPreview();
-            });
-            this.recentColorsList.appendChild(colorBtn);
-        });
-    }
-}
-
-// Initialize the application
-document.addEventListener('DOMContentLoaded', () => {
-    try {
-        const app = new ChromakopiaFontGenerator();
-        console.log('Chromakopia Font Generator FULLY FIXED VERSION loaded successfully');
-        
-    } catch (error) {
-        console.error('Failed to initialize app:', error);
-    }
-    // TOC toggle
-    const tocToggle = document.getElementById('toc-toggle');
-    const tocList = document.getElementById('toc-list');
-    if (tocToggle && tocList) {
-        tocToggle.addEventListener('click', () => {
-            const expanded = tocToggle.getAttribute('aria-expanded') === 'true';
-            tocToggle.setAttribute('aria-expanded', String(!expanded));
-            tocToggle.textContent = expanded ? 'Show' : 'Hide';
-            tocList.style.display = expanded ? 'none' : 'block';
-        });
-    }
-
-    // Smooth scroll for in-page links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            const targetId = this.getAttribute('href');
-            if (!targetId || targetId.length < 2) return;
-            const el = document.querySelector(targetId);
-            if (!el) return;
-            e.preventDefault();
-            el.scrollIntoView({ behavior: 'smooth' });
-        });
-    });
-
-    // Reading progress bar
-    const progressBar = document.querySelector('.reading-progress');
-    const guide = document.querySelector('#guide');
-    if (progressBar && guide) {
-        const updateProgress = () => {
-            const rect = guide.getBoundingClientRect();
-            const total = guide.scrollHeight - window.innerHeight;
-            const scrolled = Math.min(Math.max(window.scrollY - guide.offsetTop, 0), total);
-            const pct = total > 0 ? (scrolled / total) * 100 : 0;
-            progressBar.style.width = pct + '%';
-        };
-        window.addEventListener('scroll', updateProgress, { passive: true });
-        window.addEventListener('resize', updateProgress);
-        updateProgress();
-    }
-
-    // Active ToC highlighting via IntersectionObserver
-    const tocLinks = Array.from(document.querySelectorAll('#table-of-contents a'));
-    const sections = tocLinks
-        .map(a => document.querySelector(a.getAttribute('href')))
-        .filter(Boolean);
-    if ('IntersectionObserver' in window && tocLinks.length && sections.length) {
-        const io = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const id = '#' + entry.target.id;
-                    tocLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === id));
-                }
-            });
-        }, { rootMargin: '-40% 0px -50% 0px', threshold: 0.01 });
-        sections.forEach(sec => io.observe(sec));
-    }
-
-    // Reveal animations for grids
-    const reveals = document.querySelectorAll('.reveal');
-    if ('IntersectionObserver' in window && reveals.length) {
-        const obs = new IntersectionObserver((entries) => {
-            entries.forEach(e => {
-                if (e.isIntersecting) {
-                    e.target.classList.add('reveal--visible');
-                    obs.unobserve(e.target);
-                }
-            });
-        }, { threshold: 0.1 });
-        reveals.forEach(el => obs.observe(el));
-    } else {
-        reveals.forEach(el => el.classList.add('reveal--visible'));
-    }
-
-    // Blog utilities: reading time, copy link
-    const readingTimeEl = document.querySelector('.blog-meta__reading-time');
-    const article = document.querySelector('#guide-article');
-    if (readingTimeEl && article) {
-        const text = article.textContent || '';
-        const words = text.trim().split(/\s+/).length;
-        const mins = Math.max(1, Math.round(words / 200));
-        readingTimeEl.textContent = `${mins} min read`;
-    }
-    const copyBtn = document.querySelector('.blog-action__copy');
-    if (copyBtn) {
-        copyBtn.addEventListener('click', async () => {
-            try {
-                await navigator.clipboard.writeText(window.location.href);
-                copyBtn.classList.add('copied');
-                setTimeout(() => copyBtn.classList.remove('copied'), 1500);
-            } catch (_) {}
-        });
-    }
-    
-    // Global error handling
-    window.addEventListener('error', (e) => {
-        console.error('Application error:', e.error);
-    });
-    
-    window.addEventListener('unhandledrejection', (e) => {
-        console.error('Unhandled promise rejection:', e.reason);
-        e.preventDefault();
-    });
-});
-
-// Export for potential module usage
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { ChromakopiaFontGenerator };
-}
+    </script>
+</body>
+</html>
