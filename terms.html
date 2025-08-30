@@ -26,12 +26,15 @@
     <!-- Header -->
     <header class="header">
         <div class="container">
-            <div class="header__content">
+            <div class="header__content" style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
                 <h1 class="header__logo">
-                    <a href="/" style="text-decoration: none; color: inherit;">
-                        CHROMAKOPIA<span class="header__logo-accent">Font Generator</span>
-                    </a>
+                    <a href="/" style="text-decoration: none; color: inherit;">CHROMAKOPIA<span class="header__logo-accent">Font Generator</span></a>
                 </h1>
+                <nav aria-label="Primary" class="hidden-mobile">
+                    <a href="/about" class="footer__link">About</a>
+                    <a href="/#guide" class="footer__link">Guide</a>
+                    <a href="/#faq" class="footer__link">FAQ</a>
+                </nav>
             </div>
         </div>
     </header>
@@ -106,8 +109,8 @@
         <div class="container">
             <div class="footer__content">
                 <div class="footer__brand">
-                    <h3 class="footer__logo">CHROMAKOPIA</h3>
-                    <p class="footer__description">Create stunning Tyler The Creator inspired text designs instantly.</p>
+                    <h3 class="header__logo">CHROMAKOPIA<span class="header__logo-accent">Font Generator</span></h3>
+                    <p class="header__subtitle">Create stunning Tyler-inspired text designs instantly</p>
                 </div>
                 
                 <div class="footer__links">
@@ -122,6 +125,7 @@
                     <div class="footer__section">
                         <h4 class="footer__section-title">Resources</h4>
                         <ul class="footer__list">
+                            <li><a href="/about" class="footer__link">About</a></li>
                             <li><a href="/#features" class="footer__link">Features</a></li>
                             <li><a href="/#faq" class="footer__link">FAQ</a></li>
                         </ul>

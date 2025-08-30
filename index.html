@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Chromakopia Font Generator Online</title>
+    <title>Chromakopia Font Generator - Free Tyler The Creator Text & PFP Maker Tool</title>
     <meta name="description" content="Create stunning Chromakopia-style text designs instantly. Free online font generator with real-time preview, custom colors & backgrounds. Perfect for social media!">
     <meta name="keywords" content="chromakopia font generator, tyler the creator font, chromakopia text generator, free font generator online, chromakopia style text">
     <meta name="robots" content="index, follow">
@@ -14,16 +14,16 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://chromakopiafont.site">
-    <meta property="og:title" content="Free Chromakopia Font Generator Online">
+    <meta property="og:title" content="Chromakopia Font Generator - Free Tyler The Creator Text & PFP Maker Tool">
     <meta property="og:description" content="Create stunning Chromakopia-style text designs instantly. Free online font generator with real-time preview, custom colors & backgrounds.">
-    <meta property="og:image" content="https://chromakopiafont.siteog-image.png">
+    <meta property="og:image" content="https://chromakopiafont.site/logo.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://chromakopiafont.site">
-    <meta property="twitter:title" content="Free Chromakopia Font Generator Online">
+    <meta property="twitter:title" content="Chromakopia Font Generator - Free Tyler The Creator Text & PFP Maker Tool">
     <meta property="twitter:description" content="Create stunning Chromakopia-style text designs instantly. Free online font generator with real-time preview.">
-    <meta property="twitter:image" content="https://chromakopiafont.siteog-image.png">
+    <meta property="twitter:image" content="https://chromakopiafont.site/logo.png">
 
     <!-- JSON-LD Schema Markup -->
     <script type="application/ld+json">
@@ -50,21 +50,76 @@
         ]
     }
     </script>
+    <!-- HowTo Schema for Generator Steps -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": "Create Chromakopia-Style Text",
+      "description": "Use the Chromakopia Font Generator to create high-quality images.",
+      "totalTime": "PT2M",
+      "step": [
+        {"@type": "HowToStep", "name": "Enter Text", "text": "Type your word or short phrase into the input.", "url": "https://chromakopiafont.site/#generator"},
+        {"@type": "HowToStep", "name": "Choose Colors & Background", "text": "Pick a text color and background (transparent, solid, gradient, or upload).", "url": "https://chromakopiafont.site/#generator"},
+        {"@type": "HowToStep", "name": "Adjust Size", "text": "Use the size slider to match your platform.", "url": "https://chromakopiafont.site/#generator"},
+        {"@type": "HowToStep", "name": "Export", "text": "Click download to export a high-quality PNG.", "url": "https://chromakopiafont.site/#generator"}
+      ]
+    }
+    </script>
+    <!-- BreadcrumbList Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://chromakopiafont.site/"},
+        {"@type": "ListItem", "position": 2, "name": "Complete Chromakopia Guide", "item": "https://chromakopiafont.site/#guide"}
+      ]
+    }
+    </script>
+    <!-- Article Structured Data for Pillar Content -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "The Ultimate Chromakopia Font Generator Guide",
+      "about": ["Chromakopia font generator", "Tyler The Creator typography", "Poleno SemiBold"],
+      "author": {"@type": "Organization", "name": "Chromakopia Font Site"},
+      "publisher": {"@type": "Organization", "name": "Chromakopia Font Site"},
+      "mainEntityOfPage": {"@type": "WebPage", "@id": "https://chromakopiafont.site/"}
+    }
+    </script>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://unpkg.com" crossorigin>
+    <link rel="preload" href="/FontType1.otf" as="font" type="font/otf" crossorigin>
+    <link rel="preload" href="/FontType2.otf" as="font" type="font/otf" crossorigin>
+    <link rel="preload" href="/FontType3.otf" as="font" type="font/otf" crossorigin>
+    <link rel="stylesheet" href="style.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.3.0/fontfaceobserver.standalone.js" defer></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
 </head>
 <body>
+    <div id="top"></div>
     <!-- Header -->
     <header class="header">
         <div class="container">
-            <div class="header__content">
-                <h1 class="header__logo">CHROMAKOPIA<span class="header__logo-accent">Font Generator</span></h1>
-                <p class="header__subtitle">Create stunning Tyler-inspired text designs instantly</p>
+            <div class="header__content" style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
+                <div>
+                    <h1 class="header__logo">CHROMAKOPIA<span class="header__logo-accent">Font Generator</span></h1>
+                    <p class="header__subtitle">Create stunning Tyler-inspired text designs instantly</p>
+                </div>
+                <nav aria-label="Primary" class="hidden-mobile">
+                    <a href="/about" class="footer__link">About</a>
+                    <a href="/#guide" class="footer__link">Guide</a>
+                    <a href="/#faq" class="footer__link">FAQ</a>
+                </nav>
             </div>
         </div>
     </header>
+
+    <!-- Reading progress bar for guide -->
+    <div class="reading-progress" aria-hidden="true"></div>
 
     <!-- Hero Section with Generator -->
     <main class="main">
@@ -76,7 +131,7 @@
                 </div>
                 
                 <!-- Generator Interface -->
-                <div class="generator">
+                <div id="generator" class="generator">
                     <div class="generator__panels">
                         <!-- Control Panel -->
                         <div class="generator__controls">
@@ -98,9 +153,16 @@
                                 <div class="color-picker-group">
                                     <div class="color-input-row">
                                         <input type="color" id="text-color" class="color-picker" value="#4ba64b">
-                                        <button id="eyedropper-btn" class="eyedropper-btn" title="Pick color from screen">
-                                            <i data-lucide="pipette"></i>
-                                        </button>
+                                    </div>
+                                    <div class="color-advanced">
+                                        <div class="color-input-row" style="gap: 8px; align-items:center;">
+                                            <input id="text-hex" class="form-control" placeholder="#01823f" maxlength="9" style="max-width: 140px;">
+                                            <div class="rgb-row" style="display:flex; gap:8px;">
+                                                <input type="number" id="text-r" class="form-control" placeholder="R" min="0" max="255" style="max-width:80px;">
+                                                <input type="number" id="text-g" class="form-control" placeholder="G" min="0" max="255" style="max-width:80px;">
+                                                <input type="number" id="text-b" class="form-control" placeholder="B" min="0" max="255" style="max-width:80px;">
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="color-presets">
                                         <button class="color-preset" data-color="#01823f" style="background: #01823f" title="Chromakopia Green"></button>
@@ -122,9 +184,9 @@
                             <div class="control-group">
                                 <label class="form-label" for="font-size">
                                     <i data-lucide="maximize-2"></i>
-                                    Font Size: <span id="size-value">72px</span>
+                                    Font Size: <span id="size-value">120px</span>
                                 </label>
-                                <input type="range" id="font-size" class="slider" min="24" max="200" value="72">
+                                <input type="range" id="font-size" class="slider" min="24" max="150" value="120">
                             </div>
 
                             <div class="control-group">
@@ -159,6 +221,25 @@
                                     </label>
                                     <input type="file" id="bg-upload" accept="image/*" class="upload-input">
                                 </div>
+
+                                <div class="bg-color-inputs" style="margin-top: 12px;">
+                                    <label class="form-label" for="bg-color">Background Color (optional)</label>
+                                    <div class="color-input-row" style="gap:8px;">
+                                        <input type="color" id="bg-color" class="color-picker" value="#01823f">
+                                        <input id="bg-hex" class="form-control" placeholder="#01823f" maxlength="9" style="max-width: 140px;">
+                                        <div class="rgb-row" style="display:flex; gap:8px;">
+                                            <input type="number" id="bg-r" class="form-control" placeholder="R" min="0" max="255" style="max-width:80px;">
+                                            <input type="number" id="bg-g" class="form-control" placeholder="G" min="0" max="255" style="max-width:80px;">
+                                            <input type="number" id="bg-b" class="form-control" placeholder="B" min="0" max="255" style="max-width:80px;">
+                                        </div>
+                                    </div>
+                                    <div class="color-input-row" style="gap:8px; align-items:center; margin-top:8px;">
+                                        <label class="checkbox"><input type="checkbox" id="tint-toggle"> Enable Image Tint</label>
+                                        <input type="color" id="tint-color" class="color-picker" value="#01823f" title="Tint Color">
+                                        <label class="form-label" for="tint-opacity" style="margin:0 8px;">Opacity</label>
+                                        <input type="range" id="tint-opacity" class="slider" min="0" max="100" value="60" style="max-width:200px;">
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="control-group">
@@ -186,11 +267,35 @@
         </div>
     </main>
 
-    <!-- Features Section -->
-    <section class="features">
+    <!-- Table of Contents (under hero) -->
+    <section class="toc">
+        <div class="container">
+            <nav id="table-of-contents" class="card toc__card" aria-label="Table of contents">
+                <div class="toc__header" style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                    <h3 style="margin:0;">Table of Contents</h3>
+                    <button id="toc-toggle" class="btn btn--outline btn--sm" aria-expanded="false" aria-controls="toc-list">Show</button>
+                </div>
+                <ul id="toc-list" class="toc__list">
+                    <li><a href="#what-is-chromakopia">What is Chromakopia? The Complete History</a></li>
+                    <li><a href="#typography-analysis">The Typography Behind Chromakopia: Technical Analysis</a></li>
+                    <li><a href="#how-to-use">How to Use Chromakopia Generator: Step-by-Step</a></li>
+                    <li><a href="#advanced-techniques">Advanced Design Techniques and Customization</a></li>
+                    <li><a href="#comparison">Chromakopia vs Other Font Generators</a></li>
+                    <li><a href="#professional-applications">Professional Applications and Use Cases</a></li>
+                    <li><a href="#typography-theory">Typography Theory Applied to Chromakopia</a></li>
+                    <li><a href="#cultural-impact">Cultural Impact and Design Philosophy</a></li>
+                    <li><a href="#user-gallery">User Gallery and Showcase</a></li>
+                    <li><a href="#faq">Frequently Asked Questions</a></li>
+                </ul>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Fast Benefits (Features) moved above guide -->
+    <section id="features" class="features">
         <div class="container">
             <h2 class="features__title">Why Choose Our Chromakopia Font Generator?</h2>
-            <div class="features__grid">
+            <div class="features__grid reveal" id="use-cases-grid">
                 <div class="feature-card">
                     <div class="feature-card__icon">⚡</div>
                     <h3 class="feature-card__title">Real-Time Preview</h3>
@@ -225,8 +330,242 @@
         </div>
     </section>
 
+    <!-- Pro Tips modern tiles -->
+    <section id="pro-tips" class="features">
+        <div class="container">
+            <h2 class="features__title">Pro Tips for Outstanding Results</h2>
+            <div class="tile-grid reveal">
+                <div class="tile">
+                    <div class="tile__icon"><i data-lucide="type"></i></div>
+                    <div class="tile__content">
+                        <h3>Keep It Short</h3>
+                        <p>Single words or tight phrases amplify first/last letter styling and readability.</p>
+                    </div>
+                </div>
+                <div class="tile">
+                    <div class="tile__icon"><i data-lucide="contrast"></i></div>
+                    <div class="tile__content">
+                        <h3>High Contrast</h3>
+                        <p>Use strong color pairs (e.g., green on black, white on deep green) to meet accessibility.</p>
+                    </div>
+                </div>
+                <div class="tile">
+                    <div class="tile__icon"><i data-lucide="image"></i></div>
+                    <div class="tile__content">
+                        <h3>Export Bigger</h3>
+                        <p>Export higher resolution and downscale for platforms to keep edges razor-sharp.</p>
+                    </div>
+                </div>
+                <div class="tile">
+                    <div class="tile__icon"><i data-lucide="align-center"></i></div>
+                    <div class="tile__content">
+                        <h3>Mind Spacing</h3>
+                        <p>Let the horns breathe. Avoid crowding multi-word layouts.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases Grid -->
+    <section id="use-cases" class="features use-cases">
+        <div class="container">
+            <h2 class="features__title">Popular Use Cases</h2>
+            <div class="features__grid">
+                <a class="feature-card" href="#generator" title="Album art & music visuals">
+                    <div class="feature-card__icon">🎵</div>
+                    <h3 class="feature-card__title">Album Art</h3>
+                    <p class="feature-card__description">Bold cover text and promotional graphics with horn emphasis.</p>
+                </a>
+                <a class="feature-card" href="#professional-applications" title="Social media posts">
+                    <div class="feature-card__icon">📱</div>
+                    <h3 class="feature-card__title">Social Posts</h3>
+                    <p class="feature-card__description">Stories, reels, and posts that stand out with strong contrast.</p>
+                </a>
+                <a class="feature-card" href="#how-to-use" title="Profile pictures & avatars">
+                    <div class="feature-card__icon">🖼️</div>
+                    <h3 class="feature-card__title">Profile Pictures</h3>
+                    <p class="feature-card__description">Create crisp PFPs with transparent backgrounds.</p>
+                </a>
+                <a class="feature-card" href="#advanced-techniques" title="Brand marks & logos">
+                    <div class="feature-card__icon">🏷️</div>
+                    <h3 class="feature-card__title">Brand Marks</h3>
+                    <p class="feature-card__description">Decorative wordmarks that balance legibility and style.</p>
+                </a>
+                <a class="feature-card" href="#typography-analysis" title="Merch & print">
+                    <div class="feature-card__icon">👕</div>
+                    <h3 class="feature-card__title">Merch & Print</h3>
+                    <p class="feature-card__description">High-resolution exports optimized for physical production.</p>
+                </a>
+                <a class="feature-card" href="#user-gallery" title="Inspiration gallery">
+                    <div class="feature-card__icon">✨</div>
+                    <h3 class="feature-card__title">Inspiration</h3>
+                    <p class="feature-card__description">Explore community creations and creative prompts.</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pillar Guide Section -->
+    <section id="guide" class="pillar">
+        <div class="container">
+
+            <header class="blog">
+                <div class="blog-hero card reveal">
+                    <div class="blog-hero__content">
+                        <h2>The Ultimate Chromakopia Font Generator Guide: Complete Typography Mastery</h2>
+                        <p class="lead">Master Chromakopia-style typography inspired by Tyler, The Creator. This comprehensive guide covers history, technical analysis, how-to steps, advanced design, professional use cases, cultural impact, and more.</p>
+                        <div class="blog-meta">
+                            <span class="badge">Guide</span>
+                            <span class="badge">Chromakopia</span>
+                            <span class="badge">Typography</span>
+                            <span class="blog-meta__reading-time" aria-label="Estimated reading time"></span>
+                            <span class="status status--info">Updated: 2025-08-30</span>
+                        </div>
+                        <div class="blog-actions">
+                            <a href="#generator" class="btn btn--primary btn--sm">Try Generator</a>
+                            <button class="btn btn--outline btn--sm blog-action__copy" type="button">Copy Link</button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            
+
+            <article class="blog" id="guide-article">
+                <section id="what-is-chromakopia">
+                    <div class="info-card card reveal">
+                        <div class="info-card__icon"><i data-lucide="book-open"></i></div>
+                        <div class="info-card__body">
+                            <h3>What is Chromakopia? The Complete History</h3>
+                            <p>Chromakopia is Tyler, The Creator's eighth studio album (Oct 28, 2024, Columbia Records). Its bold green-and-black visual identity and distinctive typography have become a cultural touchstone that extends far beyond music into digital design, brand visuals, and social media aesthetics.</p>
+                            <h4>The Album's Genesis</h4>
+                            <p>Originally conceived around Tyler’s childhood in Hawthorne and Inglewood, Chromakopia evolved to reflect the guidance of his mother, Bonita Smith. This personal narrative informs the album’s striking typographic system and visual choices.</p>
+                            <h4>The Visual Identity Revolution</h4>
+                            <p>The monochrome green background with assertive black lettering departs from earlier eras like IGOR and CMIYGL, signaling a mature, confident direction while preserving Tyler’s bold signature.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="typography-analysis">
+                    <div class="info-card card reveal">
+                        <div class="info-card__icon"><i data-lucide="type"></i></div>
+                        <div class="info-card__body">
+                            <h3>The Typography Behind Chromakopia: Technical Analysis</h3>
+                            <h4>Font Foundation: Poleno SemiBold</h4>
+                            <p>The title styling draws on Poleno SemiBold (DizajnDesign, 2006), inspired by woodcut cover art from Martin Benka. Its hand-crafted character suits large, expressive display settings.</p>
+                            <ul>
+                                <li>Bold, woodcut-inspired letterforms</li>
+                                <li>High stroke contrast and strong presence at large sizes</li>
+                                <li>Contextual alternates improve repeated character rhythm</li>
+                            </ul>
+                            <h4>The Chromakopia Modification</h4>
+                            <p>Signature curved, horn-like extensions appear on first and last letters, keeping spacing consistent while amplifying attitude and recognition.</p>
+                            <h4>Color Psychology and Application</h4>
+                            <ul>
+                                <li>Background: deep green (#1B4D3E); Text: black (#000)</li>
+                                <li>Green signals growth and stability; black conveys sophistication</li>
+                                <li>High-contrast pairings maximize readability</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="how-to-use">
+                    <div class="info-card card reveal">
+                        <div class="info-card__icon"><i data-lucide="check-square"></i></div>
+                        <div class="info-card__body">
+                            <h3>How to Use Chromakopia Font Generator: Step-by-Step Guide</h3>
+                            <ol>
+                                <li>Enter your text and keep it concise for horn emphasis.</li>
+                                <li>Choose text color via presets, picker, or eyedropper; set background (transparent, solid, gradient, or image upload).</li>
+                                <li>Adjust size for the intended platform; preview and refine.</li>
+                                <li>Export PNG at suitable resolution; SVG where supported.</li>
+                            </ol>
+                            <p>Best results: single words or short phrases; prioritize high-contrast color combinations and accessibility.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="advanced-techniques">
+                    <div class="info-card card reveal">
+                        <div class="info-card__icon"><i data-lucide="sliders"></i></div>
+                        <div class="info-card__body">
+                            <h3>Advanced Design Techniques and Customization</h3>
+                            <ul>
+                                <li>Typography hierarchy: reserve horned styling for main headlines.</li>
+                                <li>Spacing: increase letter-spacing for drama; mind horn clearance.</li>
+                                <li>Pairings: combine with clean sans-serifs (e.g., Inter, Roboto) or modern serifs for contrast.</li>
+                                <li>Creative uses: logos, album art, story templates, animated horn reveals.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="comparison">
+                    <div class="info-card card reveal">
+                        <div class="info-card__icon"><i data-lucide="bar-chart-2"></i></div>
+                        <div class="info-card__body">
+                            <h3>Chromakopia vs Other Font Generators</h3>
+                            <p>Compared to generic or themed generators, Chromakopia’s horned letterforms deliver a distinct identity, deep customization, and professional-grade exports suited for social, brand, and music industry applications.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="professional-applications">
+                    <div class="info-card card reveal">
+                        <div class="info-card__icon"><i data-lucide="briefcase"></i></div>
+                        <div class="info-card__body">
+                            <h3>Professional Applications and Use Cases</h3>
+                            <ul>
+                                <li>Music: album covers, festival promos, merch graphics, YouTube thumbnails</li>
+                                <li>Social: Instagram covers, TikTok overlays, profile aesthetics</li>
+                                <li>Brand: lifestyle branding, event promos, gallery visuals</li>
+                                <li>Education: typography studies, color theory demonstrations</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="typography-theory">
+                    <div class="info-card card reveal">
+                        <div class="info-card__icon"><i data-lucide="book-open"></i></div>
+                        <div class="info-card__body">
+                            <h3>Typography Theory Applied to Chromakopia</h3>
+                            <ul>
+                                <li>Visual hierarchy: horns capture attention and aid recall</li>
+                                <li>Gestalt principles: closure, similarity, and figure/ground reinforce unity</li>
+                                <li>Balance: manage legibility vs. expression based on context</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="cultural-impact">
+                    <div class="info-card card reveal">
+                        <div class="info-card__icon"><i data-lucide="globe"></i></div>
+                        <div class="info-card__body">
+                            <h3>Cultural Impact and Design Philosophy</h3>
+                            <p>Chromakopia reflects Tyler’s evolution and influences contemporary digital aesthetics, from social design trends to music branding, inspiring community-made tools and educational study.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="user-gallery">
+                    <div class="info-card card reveal">
+                        <div class="info-card__icon"><i data-lucide="image"></i></div>
+                        <div class="info-card__body">
+                            <h3>User Gallery and Showcase</h3>
+                            <p>Explore and contribute community creations. Consider 30-day creation challenges, color experiments, and cross-platform posting to improve reach and engagement.</p>
+                        </div>
+                    </div>
+                </section>
+            </article>
+        </div>
+    </section>
+
     <!-- FAQ Section -->
-    <section class="faq">
+    <section id="faq" class="faq">
         <div class="container">
             <h2 class="faq__title">Frequently Asked Questions</h2>
             <div class="faq__list">
@@ -329,8 +668,8 @@
         <div class="container">
             <div class="footer__content">
                 <div class="footer__brand">
-                    <h3 class="footer__logo">CHROMAKOPIA</h3>
-                    <p class="footer__description">Create stunning Tyler The Creator inspired text designs instantly.</p>
+                    <h3 class="header__logo">CHROMAKOPIA<span class="header__logo-accent">Font Generator</span></h3>
+                    <p class="header__subtitle">Create stunning Tyler-inspired text designs instantly</p>
                 </div>
                 
                 <div class="footer__links">
@@ -345,6 +684,7 @@
                     <div class="footer__section">
                         <h4 class="footer__section-title">Resources</h4>
                         <ul class="footer__list">
+                            <li><a href="/about" class="footer__link">About</a></li>
                             <li><a href="#features" class="footer__link">Features</a></li>
                             <li><a href="#faq" class="footer__link">FAQ</a></li>
                         </ul>
@@ -452,6 +792,16 @@
         ]
     }
     </script>
+
+    <a href="#generator" class="btn download-btn floating-cta" aria-label="Start creating"><i data-lucide="sparkles"></i><span>Start Creating</span></a>
+    <a href="#top" class="btn btn--outline back-to-top" aria-label="Back to top">Back to Top</a>
+    <div class="share-rail" role="group" aria-label="Share this page">
+        <a class="share-btn" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=Create%20Chromakopia%20style%20text&url=https%3A%2F%2Fchromakopiafont.site%2F" title="Share on X"><i data-lucide="twitter"></i></a>
+        <a class="share-btn" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fchromakopiafont.site%2F" title="Share on Facebook"><i data-lucide="facebook"></i></a>
+        <a class="share-btn" target="_blank" rel="noopener" href="https://www.reddit.com/submit?url=https%3A%2F%2Fchromakopiafont.site%2F&title=Chromakopia%20Font%20Generator" title="Share on Reddit">
+            <svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg" width="2500" height="2500"><circle cx="400" cy="400" fill="#ff4500" r="400"/><path d="M666.8 400c.08 5.48-.6 10.95-2.04 16.24s-3.62 10.36-6.48 15.04c-2.85 4.68-6.35 8.94-10.39 12.65s-8.58 6.83-13.49 9.27c.11 1.46.2 2.93.25 4.4a107.268 107.268 0 0 1 0 8.8c-.05 1.47-.14 2.94-.25 4.4 0 89.6-104.4 162.4-233.2 162.4S168 560.4 168 470.8c-.11-1.46-.2-2.93-.25-4.4a107.268 107.268 0 0 1 0-8.8c.05-1.47.14-2.94.25-4.4a58.438 58.438 0 0 1-31.85-37.28 58.41 58.41 0 0 1 7.8-48.42 58.354 58.354 0 0 1 41.93-25.4 58.4 58.4 0 0 1 46.52 15.5 286.795 286.795 0 0 1 35.89-20.71c12.45-6.02 25.32-11.14 38.51-15.3s26.67-7.35 40.32-9.56 27.45-3.42 41.28-3.63L418 169.6c.33-1.61.98-3.13 1.91-4.49.92-1.35 2.11-2.51 3.48-3.4 1.38-.89 2.92-1.5 4.54-1.8 1.61-.29 3.27-.26 4.87.09l98 19.6c9.89-16.99 30.65-24.27 48.98-17.19s28.81 26.43 24.71 45.65c-4.09 19.22-21.55 32.62-41.17 31.61-19.63-1.01-35.62-16.13-37.72-35.67L440 186l-26 124.8c13.66.29 27.29 1.57 40.77 3.82a284.358 284.358 0 0 1 77.8 24.86A284.412 284.412 0 0 1 568 360a58.345 58.345 0 0 1 29.4-15.21 58.361 58.361 0 0 1 32.95 3.21 58.384 58.384 0 0 1 25.91 20.61A58.384 58.384 0 0 1 666.8 400zm-396.96 55.31c2.02 4.85 4.96 9.26 8.68 12.97 3.71 3.72 8.12 6.66 12.97 8.68A40.049 40.049 0 0 0 306.8 480c16.18 0 30.76-9.75 36.96-24.69 6.19-14.95 2.76-32.15-8.68-43.59s-28.64-14.87-43.59-8.68c-14.94 6.2-24.69 20.78-24.69 36.96 0 5.25 1.03 10.45 3.04 15.31zm229.1 96.02c2.05-2 3.22-4.73 3.26-7.59.04-2.87-1.07-5.63-3.07-7.68s-4.73-3.22-7.59-3.26c-2.87-.04-5.63 1.07-7.94 2.8a131.06 131.06 0 0 1-19.04 11.35 131.53 131.53 0 0 1-20.68 7.99c-7.1 2.07-14.37 3.54-21.72 4.39-7.36.85-14.77 1.07-22.16.67-7.38.33-14.78.03-22.11-.89a129.01 129.01 0 0 1-21.64-4.6c-7.08-2.14-13.95-4.88-20.56-8.18s-12.93-7.16-18.89-11.53c-2.07-1.7-4.7-2.57-7.38-2.44s-5.21 1.26-7.11 3.15c-1.89 1.9-3.02 4.43-3.15 7.11s.74 5.31 2.44 7.38c7.03 5.3 14.5 9.98 22.33 14s16 7.35 24.4 9.97 17.01 4.51 25.74 5.66c8.73 1.14 17.54 1.53 26.33 1.17 8.79.36 17.6-.03 26.33-1.17A153.961 153.961 0 0 0 476.87 564c7.83-4.02 15.3-8.7 22.33-14zm-7.34-68.13c5.42.06 10.8-.99 15.81-3.07 5.01-2.09 9.54-5.17 13.32-9.06s6.72-8.51 8.66-13.58A39.882 39.882 0 0 0 532 441.6c0-16.18-9.75-30.76-24.69-36.96-14.95-6.19-32.15-2.76-43.59 8.68s-14.87 28.64-8.68 43.59c6.2 14.94 20.78 24.69 36.96 24.69z" fill="#fff"/></svg>        </a>
+        <a class="share-btn" target="_blank" rel="noopener" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fchromakopiafont.site%2F" title="Share on LinkedIn"><i data-lucide="linkedin"></i></a>
+    </div>
 
     <script src="app.js"></script>
     <script>
