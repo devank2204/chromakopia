@@ -1,0 +1,12 @@
+/style.min.css
+  Cache-Control: public, max-age=31536000, immutable
+/app.js
+  Cache-Control: public, max-age=31536000, immutable
+/FontType1.otf
+  Cache-Control: public, max-age=31536000, immutable
+/FontType2.otf
+  Cache-Control: public, max-age=31536000, immutable
+/FontType3.otf
+  Cache-Control: public, max-age=31536000, immutable
+/logo.png
+  Cache-Control: public, max-age=31536000, immutable

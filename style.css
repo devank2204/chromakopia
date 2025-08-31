@@ -812,6 +812,7 @@ select.form-control {
   font-family: 'FKGroteskNeue';
   src: url('https://r2cdn.perplexity.ai/fonts/FKGroteskNeue.woff2')
     format('woff2');
+  font-display: swap;
 }
 
 /* Authentic Chromakopia font faces */
@@ -1817,6 +1818,7 @@ body::before {
 .share-rail a { display:flex; align-items:center; justify-content:center; width: 36px; height:36px; border-radius: 8px; border:1px solid var(--glass-border); background: rgba(255,255,255,.02); transition: transform .2s var(--ease-standard), background .2s var(--ease-standard); }
 .share-rail a:hover { transform: translateY(-2px); background: rgba(1,130,63,.12); border-color: var(--chromakopia-primary); }
 .share-rail i { width: 18px; height:18px; }
+.share-rail svg { width:18px; height:18px; }
 
 @media (max-width: 768px) {
   .share-rail { right: 12px; bottom: 140px; }
